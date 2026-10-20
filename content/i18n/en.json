@@ -186,5 +186,6 @@
   "nb.codex.intro": "{n}/{total} species found. Each one is a different body + element: write a class and `new` it into the lab. Silhouettes show the shape as a hint.",
   "nb.codex.unknown": "Not found yet. Guess the body from its shape.",
   "banner.species": "New species!",
-  "ref.species": "New species: {name}! (body \"{body}\" + element \"{element}\") Added to the codex."
+  "ref.species": "New species: {name}! (body \"{body}\" + element \"{element}\") Added to the codex.",
+  "ref.scriptTimeout": "{name} spun through a loop so fast I had to stop it. Either the loop has no slime action inside (like slime.gatherNearest()), or its condition never turns false. Check your while / for."
 }

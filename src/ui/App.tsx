@@ -150,7 +150,7 @@ export function App({ saved }: { saved: LabSave | null }) {
         const next = new Map<number, Status>()
         for (const e of out.errors) {
           if (e.id !== null) next.set(e.id, e.kind === 'timeout' ? 'dizzy' : 'confused')
-          const text = explainError(e, nameOf(e.id), jsLines.current)
+          const text = explainError(e, nameOf(e.id), jsLines.current, mode.current ?? 'script')
           sayOnce(text, text, 'error') // keyed by text: the same typo in 10 slimes is one message
         }
         if (!sameStatus(next, shown)) setStatus((shown = next))
@@ -341,7 +341,7 @@ export function App({ saved }: { saved: LabSave | null }) {
     const res = await sandbox.current?.load(r.js, world)
     if (!res) return
     if (!res.ok) {
-      say(explainError(res.error, null, r.lines), 'error')
+      say(explainError(res.error, null, r.lines, /\bclass\s/.test(r.js) ? 'class' : 'script'), 'error')
       return say(t('ref.keepOld'))
     }
     jsLines.current = r.lines

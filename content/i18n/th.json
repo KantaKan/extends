@@ -186,5 +186,6 @@
   "nb.codex.intro": "ค้นพบแล้ว {n}/{total} สายพันธุ์ แต่ละแบบคือ body + element ที่ต่างกัน เขียน class ใหม่ แล้ว new ให้มันเกิดในแลป เงาดำบอกรูปร่างไว้เป็นคำใบ้",
   "nb.codex.unknown": "ยังไม่ค้นพบ ลองเดาจากรูปร่างดูว่า body อะไร",
   "banner.species": "ค้นพบสายพันธุ์ใหม่!",
-  "ref.species": "สายพันธุ์ใหม่: {name}! (body \"{body}\" + element \"{element}\") บันทึกลงสมุดสะสมแล้ว"
+  "ref.species": "สายพันธุ์ใหม่: {name}! (body \"{body}\" + element \"{element}\") บันทึกลงสมุดสะสมแล้ว",
+  "ref.scriptTimeout": "{name} วนลูปรัวจนผมต้องกดหยุดให้ ลูปนั้นไม่มีคำสั่งให้ slime ทำ (เช่น slime.gatherNearest()) หรือเงื่อนไขของมันไม่มีวันเป็น false ลองเช็ค while / for ของนายดู"
 }

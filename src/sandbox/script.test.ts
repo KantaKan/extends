@@ -86,7 +86,7 @@ describe('script mode (act 1)', () => {
   it('an error after actions stops the program and is reported with its line', async () => {
     const r = await run('slime.gatherNearest()\nnope()', 200)
     expect(r.errors).toEqual([expect.objectContaining({ kind: 'error', line: 2 })])
-    expect(r.finished).toBe(true)
+    expect(r.finished).toBe(false) // it crashed: Ref explains the error instead of "done every line"
   })
 
   it('a runaway loop with no actions in it is stopped', async () => {
@@ -94,6 +94,7 @@ describe('script mode (act 1)', () => {
     const r = await run('slime.gatherNearest()\nwhile (true) {}', 200)
     expect(Date.now() - t0).toBeLessThan(3000)
     expect(r.errors[0]).toMatchObject({ kind: 'timeout' })
+    expect(r.finished).toBe(false) // stopped, not "done every line"
   })
 
   it('looping on an empty field (every call returns false at once) is stopped too', async () => {

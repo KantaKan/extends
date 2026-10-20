@@ -7,14 +7,14 @@
       "goldenChance": 0
     },
     {
-      "cost": 30,
+      "cost": 50,
       "respawnTicks": 14,
       "essenceMax": 16,
       "extraRadius": 0.7,
       "goldenChance": 0.08
     },
     {
-      "cost": 80,
+      "cost": 140,
       "respawnTicks": 10,
       "essenceMax": 20,
       "extraRadius": 1.4,
@@ -27,12 +27,12 @@
       "maxSpeed": 1
     },
     {
-      "cost": 40,
+      "cost": 70,
       "mana": 30,
       "maxSpeed": 4
     },
     {
-      "cost": 100,
+      "cost": 180,
       "mana": 45,
       "maxSpeed": 16
     }
@@ -42,11 +42,11 @@
       "hatchCost": 3
     },
     {
-      "cost": 25,
+      "cost": 40,
       "hatchCost": 2
     },
     {
-      "cost": 60,
+      "cost": 100,
       "hatchCost": 1
     }
   ]

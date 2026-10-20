@@ -13,6 +13,11 @@ describe('Ref explains errors in Thai', () => {
   it('infinite loops, at load vs in update()', () => {
     expect(explainError({ id: 1, kind: 'timeout', message: '', line: 2 }, 'Mochi')).toContain('Mochi วนไม่จบ')
     expect(explainError({ id: null, kind: 'timeout', message: '', line: 1 }, null)).toContain('โค้ดนอก class')
+    // Act 1 has no class: blame the loop, not a method or a bogus line 1.
+    const s = explainError({ id: 1, kind: 'timeout', message: '', line: 1 }, 'Mochi', [], 'script')
+    expect(s).toContain('Mochi')
+    expect(s).not.toContain('class')
+    expect(s).not.toContain('method')
   })
   it('falls back to the raw message without the error class name', () => {
     expect(explainError({ id: 1, kind: 'error', message: 'Error: boom', line: 9 }, 'Mochi')).toBe('Mochi เจอปัญหาที่บรรทัด 9: boom')

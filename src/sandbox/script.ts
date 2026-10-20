@@ -21,6 +21,7 @@ export class ScriptRunner {
   private pending: Pending | null = null
   private finished = false
   private finishReported = false
+  private crashed = false // ended on an error: Ref explains the error, not "done every line"
   private startedActing = false
   private wake: (() => void) | null = null
   private outbox: unknown[] = []
@@ -54,7 +55,7 @@ export class ScriptRunner {
     r.done = ctx.evalCodeAsync(js, 'lab.js').then((res) => {
       if (res.error) {
         const e = toError(ctx, res.error, r.startedActing ? r.slimeId : null)
-        if (e.message !== 'Stop: stopped') r.errors.push(e)
+        if (e.message !== 'Stop: stopped') { r.errors.push(e); r.crashed = true }
       } else res.value.dispose()
       r.finished = true
       r.wake?.()
@@ -88,7 +89,7 @@ export class ScriptRunner {
     this.logs = []
     this.errors = []
     // "Done every line" only means something once the program actually did something.
-    if (this.finished && !this.finishReported && this.startedActing) { out.finished = true; this.finishReported = true }
+    if (this.finished && !this.crashed && !this.finishReported && this.startedActing) { out.finished = true; this.finishReported = true }
     return out
   }
 

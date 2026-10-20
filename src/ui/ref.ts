@@ -8,15 +8,20 @@ import { t } from './i18n'
 
 const OPTIONS: Record<Part, readonly string[]> = { body: BODY_NAMES, element: ELEMENTS, eyes: EYE_NAMES, horns: ['none', 'small', 'big'] }
 
-/** `lines` maps emitted-JS lines back to editor lines (from the source map). */
-export function explainError(e: CodeError, name: string | null, lines: readonly number[] = []): string {
+/**
+ * `lines` maps emitted-JS lines back to editor lines (from the source map). `mode`: act-1 scripts have no
+ * class or method to blame, and QuickJS reports their runaway loops on line 1, so that message names the cause instead.
+ */
+export function explainError(e: CodeError, name: string | null, lines: readonly number[] = [], mode: 'script' | 'class' = 'class'): string {
   const line = e.line === undefined ? '?' : (lines[e.line] ?? e.line)
   const who = name ?? t('ref.someone')
   const msg = e.message.replace(/^\w*Error: /, '')
   const load = e.id === null
   switch (e.kind) {
     case 'syntax': return t('ref.syntax', { line, msg })
-    case 'timeout': return t(load ? 'ref.loadTimeout' : 'ref.timeout', { name: who, line })
+    case 'timeout':
+      if (mode === 'script') return t('ref.scriptTimeout', { name: name ?? 'slime' })
+      return t(load ? 'ref.loadTimeout' : 'ref.timeout', { name: who, line })
     case 'mana': return t('ref.mana', { name: who })
     case 'no-class': return t('ref.noClass', { name: who, cls: e.message })
   }
