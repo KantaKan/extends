@@ -55,6 +55,7 @@ export function RefBot({ instruction, lines, onReset }: Props) {
   }, [])
 
   const recent = lines.slice(-3)
+  const lastError = lines.slice(-2).find((l) => l.kind === 'error') // an error + "keeping the old code"; the next save pushes it out
   return (
     <div className="refbot">
       {logOpen && (
@@ -67,7 +68,13 @@ export function RefBot({ instruction, lines, onReset }: Props) {
         </div>
       )}
       <div className="bubble" aria-live="polite">
-        {instruction ? <p className="instruction">{instruction}</p> : recent.map((l) => <p key={l.id} className={l.kind}>{l.text}</p>)}
+        {instruction ? (
+          <>
+            <p className="instruction">{instruction}</p>
+            {/* a typo during the tutorial must not hide in the log: show it until the next save */}
+            {lastError && <p className="error">{lastError.text}</p>}
+          </>
+        ) : recent.map((l) => <p key={l.id} className={l.kind}>{l.text}</p>)}
       </div>
       <button type="button" className="bot" onClick={() => setLogOpen((o) => !o)} aria-expanded={logOpen} title={t('log.open')}>
         <canvas ref={canvas} width={BOT[0]!.length * SCALE} height={BOT.length * SCALE} />

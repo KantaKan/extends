@@ -2,7 +2,7 @@
 
 export const stripComments = (src: string) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')
 
-export type CodeFeatures = { loop: boolean; if: boolean; function: boolean; this: boolean }
+export type CodeFeatures = { loop: boolean; if: boolean; function: boolean; this: boolean; class: boolean }
 
 export function codeFeatures(src: string): CodeFeatures {
   const code = stripComments(src)
@@ -12,6 +12,8 @@ export function codeFeatures(src: string): CodeFeatures {
     function: reusesAFunction(code),
     // `this.hunger`: each creature reading its *own* value, the point of the this lesson
     this: /\bthis\.hunger\b/.test(code),
+    // a class whose creatures think for themselves: it has an update() method
+    class: /\bclass\s+[A-Za-z_$][\w$]*[^{]*\{[\s\S]*\bupdate\s*\(/.test(code),
   }
 }
 

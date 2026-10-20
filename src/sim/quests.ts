@@ -3,7 +3,7 @@ import type { World } from './world'
 // Quest definitions are data (content/quests.json); this only knows how to check each goal type.
 
 /** A concept the quest teaches: the player's code must really use it (src/editor/features.ts). */
-export type Concept = 'loop' | 'if' | 'function' | 'this'
+export type Concept = 'loop' | 'if' | 'function' | 'this' | 'class'
 
 export type Goal = (
   | { type: 'renamed' }
@@ -13,7 +13,13 @@ export type Goal = (
   | { type: 'herd'; count: number; uniqueNames?: boolean }
   /** `count` different creatures each ate at least once since the quest started. */
   | { type: 'eachAte'; count: number }
-  | { type: 'subclass'; changes: 'element' }
+  /** `count` creatures (default 1) of a class that extends a player class and changes its element. */
+  | { type: 'subclass'; changes: 'element'; count?: number }
+  /** Machine levels bought, in total. */
+  | { type: 'upgraded'; count: number }
+  | { type: 'researched'; count: number }
+  /** Species in the codex. */
+  | { type: 'species'; count: number }
 ) & { needs?: Concept[] }
 
 export type Quest = { id: string; goal: Goal; reward: { lights?: boolean }; textKey: string }
@@ -33,11 +39,15 @@ export type QuestContext = {
   mealsAtStart: Record<number, number>
   /** Concepts the player's code uses. */
   code: Record<Concept, boolean>
+  /** Parts researched so far. */
+  unlocks: number
+  /** Species found so far (codex). */
+  species: number
 }
 
 const count = (have: number, need: number): Progress => ({ have: Math.max(0, Math.min(have, need)), need })
 
-function measure(goal: Goal, w: World, { classes, since, mealsAtStart }: QuestContext): Progress {
+function measure(goal: Goal, w: World, { classes, since, mealsAtStart, unlocks, species }: QuestContext): Progress {
   switch (goal.type) {
     case 'renamed': return count(w.stats.renamed - since.renamed, 1)
     case 'gathered': return count(w.stats.gathered - since.gathered, goal.count)
@@ -47,13 +57,16 @@ function measure(goal: Goal, w: World, { classes, since, mealsAtStart }: QuestCo
     case 'herd': return count(goal.uniqueNames ? new Set(w.creatures.map((c) => c.name)).size : w.creatures.length, goal.count)
     case 'subclass': {
       // A class that extends a player class and changes its element: inheritance, not copy-paste.
-      const ok = w.creatures.some((c) => {
+      const morphed = w.creatures.filter((c) => {
         const info = classes.get(c.className)
         const parent = info?.parent ? classes.get(info.parent) : undefined
         return !!info && !!parent && info.element !== parent.element
       })
-      return count(ok ? 1 : 0, 1)
+      return count(morphed.length, goal.count ?? 1)
     }
+    case 'upgraded': return count(Object.values(w.levels).reduce((a, b) => a + b, 0), goal.count)
+    case 'researched': return count(unlocks, goal.count)
+    case 'species': return count(species, goal.count)
   }
 }
 

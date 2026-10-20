@@ -25,7 +25,7 @@ import { LabView } from './LabView'
 import { Pointer } from './Pointer'
 import { clearProgress, loadProgress, saveProgress, type Progress as SaveProgress } from './progress'
 import { QuestCard, questText } from './QuestCard'
-import { explainError, explainInvalidParts } from './ref'
+import { explainError, explainInvalidParts, explainSyntax } from './ref'
 import { RefBot } from './RefBot'
 import { StarterPick, type StarterChoice } from './StarterPick'
 import { TopBar, type Speed } from './TopBar'
@@ -55,7 +55,8 @@ const hudOf = (w: World) => ({ essence: w.resources.essence, mana: w.manaLeft, m
 const sameStatus = (a: Map<number, Status>, b: Map<number, Status>) => a.size === b.size && [...a].every(([k, v]) => b.get(k) === v)
 
 function spawnStarter(w: World, starter: { name: string }) {
-  if (!w.creatures.length) spawnCreature(w, starter.name, STARTER_CLASS)
+  // Out of the hatchery, a walk away from the well: the first command is something you can watch.
+  if (!w.creatures.length) spawnCreature(w, starter.name, STARTER_CLASS, w.layout.hatchery.x, w.layout.hatchery.y + 0.6)
 }
 
 /** Quest 3 asks for a subclass with a *different* element than the starter. */
@@ -110,7 +111,7 @@ export function App({ saved }: { saved: LabSave | null }) {
   const jsLines = useRef<number[]>([]) // JS line → editor line for the code that is running
   const classInfo = useRef<ClassInfo>(new Map())
   const questSince = useRef<World['stats']>(saved?.questSince ?? { ...world.stats }) // world stats when the current quest started
-  const features = useRef<CodeFeatures>({ loop: false, if: false, function: false, this: false }) // concepts the running code uses
+  const features = useRef<CodeFeatures>({ loop: false, if: false, function: false, this: false, class: false }) // concepts the running code uses
   const mode = useRef<'class' | 'script' | null>(null) // how the saved code runs (see src/sandbox/worker.ts)
   const live = useRef({ speed, questIx, inTutorial, lit })
   live.current = { speed, questIx, inTutorial, lit }
@@ -197,7 +198,7 @@ export function App({ saved }: { saved: LabSave | null }) {
     function checkQuest() {
       const q = quests[live.current.questIx]
       if (!q) return
-      const p = questProgressOf(q.goal, world, { classes: classInfo.current, since: questSince.current, mealsAtStart: mealsAtStart.current, code: features.current })
+      const p = questProgressOf(q.goal, world, { classes: classInfo.current, since: questSince.current, mealsAtStart: mealsAtStart.current, code: features.current, unlocks: unlocks.current.size, species: codex.current.size })
       setQuestProgress((old) => (old && old.have === p.have && old.need === p.need && old.missing === p.missing ? old : p))
       if (p.missing) sayOnce(`missing-${p.missing}`, t(`quest.needs.${p.missing}` as Key))
       const n = nudge.current
@@ -335,7 +336,7 @@ export function App({ saved }: { saved: LabSave | null }) {
 
   const onSave = async (r: Transpiled) => {
     if (!r.ok) {
-      say(t('ref.syntax', { line: r.line, msg: r.message }), 'error')
+      say(explainSyntax(r.code, r.message, r.line), 'error')
       return say(t('ref.keepOld'))
     }
     const res = await sandbox.current?.load(r.js, world)

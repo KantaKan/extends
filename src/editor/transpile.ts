@@ -30,7 +30,7 @@ export function showApiFor(source: string) {
 showApiFor('')
 
 /** `lines[jsLine]` = the line in the editor. */
-export type Transpiled = { ok: true; js: string; lines: number[]; source: string } | { ok: false; message: string; line: number }
+export type Transpiled = { ok: true; js: string; lines: number[]; source: string } | { ok: false; message: string; line: number; code: number }
 
 /** TS → JS with Monaco's own TypeScript worker. Only syntax errors block; type errors are hints. */
 export async function transpile(model: monaco.editor.ITextModel): Promise<Transpiled> {
@@ -39,7 +39,7 @@ export async function transpile(model: monaco.editor.ITextModel): Promise<Transp
   const [first] = await worker.getSyntacticDiagnostics(uri)
   if (first) {
     const text = typeof first.messageText === 'string' ? first.messageText : first.messageText.messageText
-    return { ok: false, message: text, line: model.getPositionAt(first.start ?? 0).lineNumber }
+    return { ok: false, message: text, code: first.code, line: model.getPositionAt(first.start ?? 0).lineNumber }
   }
   const out = await worker.getEmitOutput(uri)
   const js = out.outputFiles.find((f) => f.name.endsWith('.js'))?.text ?? ''

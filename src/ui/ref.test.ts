@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { buildSpecies } from '../render/morph/looks'
-import { explainError, explainInvalidParts } from './ref'
+import { explainError, explainInvalidParts, explainSyntax } from './ref'
 
 describe('Ref explains errors in Thai', () => {
   it('reading from undefined names the property, the creature and the editor line', () => {
@@ -21,6 +21,8 @@ describe('Ref explains errors in Thai', () => {
   })
   it('falls back to the raw message without the error class name', () => {
     expect(explainError({ id: 1, kind: 'error', message: 'Error: boom', line: 9 }, 'Mochi')).toBe('Mochi เจอปัญหาที่บรรทัด 9: boom')
+    expect(explainError({ id: null, kind: 'error', message: 'ReferenceError: FireSlime is not initialized', line: 9 }, null)).toContain('FireSlime')
+    expect(explainError({ id: null, kind: 'error', message: 'ReferenceError: FireSlime is not initialized', line: 9 }, null)).not.toContain('initialized')
   })
   it('bad part values list the real options, once', () => {
     const sp = buildSpecies({
@@ -31,5 +33,13 @@ describe('Ref explains errors in Thai', () => {
     expect(lines).toHaveLength(1)
     expect(lines[0]).toContain('"dragon"')
     expect(lines[0]).toContain('blob')
+  })
+
+  it('common syntax errors read as plain Thai; rare ones pass through', () => {
+    expect(explainSyntax(1002, 'Unterminated string literal.', 4)).toContain('"')
+    expect(explainSyntax(1002, 'Unterminated string literal.', 4)).not.toContain('Unterminated')
+    expect(explainSyntax(1005, "')' expected.", 7)).toContain(')')
+    expect(explainSyntax(1005, "')' expected.", 7)).toContain('7')
+    expect(explainSyntax(9999, 'Something odd.', 2)).toContain('Something odd.')
   })
 })

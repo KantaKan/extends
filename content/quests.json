@@ -54,6 +54,18 @@
     "textKey": "gatherFunction"
   },
   {
+    "id": "first-class",
+    "goal": {
+      "type": "gathered",
+      "count": 3,
+      "needs": [
+        "class"
+      ]
+    },
+    "reward": {},
+    "textKey": "firstClass"
+  },
+  {
     "id": "herd-10",
     "goal": {
       "type": "herd",
@@ -82,9 +94,37 @@
     "id": "new-element",
     "goal": {
       "type": "subclass",
-      "changes": "element"
+      "changes": "element",
+      "count": 10
     },
     "reward": {},
     "textKey": "newElement"
+  },
+  {
+    "id": "upgrade-machine",
+    "goal": {
+      "type": "upgraded",
+      "count": 1
+    },
+    "reward": {},
+    "textKey": "upgradeMachine"
+  },
+  {
+    "id": "research-part",
+    "goal": {
+      "type": "researched",
+      "count": 1
+    },
+    "reward": {},
+    "textKey": "researchPart"
+  },
+  {
+    "id": "codex-4",
+    "goal": {
+      "type": "species",
+      "count": 4
+    },
+    "reward": {},
+    "textKey": "codex4"
   }
 ]

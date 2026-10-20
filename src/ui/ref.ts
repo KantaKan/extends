@@ -4,7 +4,7 @@ import type { Part, Species } from '../render/morph/looks'
 import { ELEMENTS } from '../render/morph/palette'
 import { EYE_NAMES } from '../render/morph/parts'
 import type { CodeError } from '../sandbox/client'
-import { t } from './i18n'
+import { t, type Key } from './i18n'
 
 const OPTIONS: Record<Part, readonly string[]> = { body: BODY_NAMES, element: ELEMENTS, eyes: EYE_NAMES, horns: ['none', 'small', 'big'] }
 
@@ -27,6 +27,8 @@ export function explainError(e: CodeError, name: string | null, lines: readonly 
   }
   let m: RegExpMatchArray | null
   if ((m = msg.match(/^cannot (?:read|set) property '(.+)' of (undefined|null)/))) return t('ref.undefined', { name: who, prop: m[1]!, what: m[2]!, line })
+  // `new FireSlime()` above `class FireSlime`: classes exist only from their line down.
+  if ((m = msg.match(/^'?([\w$]+)'? is not initialized/))) return t('ref.tdz', { ident: m[1]!, line })
   if ((m = msg.match(/^'(.+)' is not defined/))) {
     // `slime` only exists in act-1 scripts; inside a class the creature is `this`.
     if (m[1] === 'slime') return t('ref.slimeInClass', { line })
@@ -34,6 +36,14 @@ export function explainError(e: CodeError, name: string | null, lines: readonly 
   }
   if (/not a function/.test(msg)) return t('ref.notFunction', { name: who, line })
   return t(load ? 'ref.loadError' : 'ref.error', { name: who, line, msg })
+}
+
+/** TypeScript syntax errors a beginner hits most, in plain words (code = TS diagnostic code); the rest as-is. */
+const SYNTAX = new Set([1002, 1003, 1005, 1068, 1109, 1127, 1128, 1160, 1161, 1434])
+export function explainSyntax(code: number, msg: string, line: number): string {
+  if (!SYNTAX.has(code)) return t('ref.syntax', { line, msg })
+  const tok = msg.match(/^'(.+)' expected/)?.[1] ?? ''
+  return t(`ref.syn.${code}` as Key, { line, tok })
 }
 
 export function explainInvalidParts(species: Map<string, Species>): string[] {

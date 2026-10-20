@@ -22,6 +22,12 @@ describe('codeFeatures', () => {
     expect(codeFeatures('const go = () => slime.gatherNearest()\ngo(); go()').function).toBe(true)
     expect(codeFeatures('const go = function () {}\ngo()\ngo()').function).toBe(true)
   })
+  it('spots a class with its own update()', () => {
+    expect(codeFeatures('class Slime extends Creature {\n  update() { this.gatherNearest() }\n}\nnew Slime()').class).toBe(true)
+    expect(codeFeatures('slime.gatherNearest() // class Slime { update() }').class).toBe(false)
+    expect(codeFeatures('class Slime extends Creature { body = "quad" }').class).toBe(false)
+  })
+
   it('spots a creature reading its own hunger with this', () => {
     expect(codeFeatures('update() { if (this.hunger > 50) this.eat() }').this).toBe(true)
     expect(codeFeatures('update() { if (slime.hunger > 50) this.eat() }').this).toBe(false)
