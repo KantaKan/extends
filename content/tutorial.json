@@ -1,0 +1,7 @@
+[
+  { "id": "meet", "textKey": "tut.meet", "waitFor": "clickCreature", "pointAt": "creature" },
+  { "id": "open", "textKey": "tut.open", "waitFor": "openDna", "pointAt": "dna-handle" },
+  { "id": "type", "textKey": "tut.type", "waitFor": "typed", "pointAt": "editor-line" },
+  { "id": "save", "textKey": "tut.save", "waitFor": "saved", "pointAt": "none" },
+  { "id": "close", "textKey": "tut.close", "waitFor": "closeDna", "pointAt": "dna-handle" }
+]

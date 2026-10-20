@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.log
+.vite/
+# original handoff bundle; its files are already in the repo
+extends-handoff.zip
+.impeccable/hook.cache.json

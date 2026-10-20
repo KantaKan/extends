@@ -1,0 +1,53 @@
+{
+  "well": [
+    {
+      "respawnTicks": 20,
+      "essenceMax": 12,
+      "extraRadius": 0,
+      "goldenChance": 0
+    },
+    {
+      "cost": 30,
+      "respawnTicks": 14,
+      "essenceMax": 16,
+      "extraRadius": 0.7,
+      "goldenChance": 0.08
+    },
+    {
+      "cost": 80,
+      "respawnTicks": 10,
+      "essenceMax": 20,
+      "extraRadius": 1.4,
+      "goldenChance": 0.15
+    }
+  ],
+  "generator": [
+    {
+      "mana": 20,
+      "maxSpeed": 1
+    },
+    {
+      "cost": 40,
+      "mana": 30,
+      "maxSpeed": 4
+    },
+    {
+      "cost": 100,
+      "mana": 45,
+      "maxSpeed": 16
+    }
+  ],
+  "hatchery": [
+    {
+      "hatchCost": 3
+    },
+    {
+      "cost": 25,
+      "hatchCost": 2
+    },
+    {
+      "cost": 60,
+      "hatchCost": 1
+    }
+  ]
+}

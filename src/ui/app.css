@@ -1,0 +1,257 @@
+/* Extends: a night-time lab. Palette follows reference/morph-lab.html. Desktop only. */
+:root {
+  --night: #13142a;
+  --panel: #1c1e37;
+  --panel-hi: #262a52;
+  --edge: #3a3f78;
+  --ink: #ecedfb;
+  --muted: #b4b6d6; /* AA on --panel */
+  --accent: #ff86a3;
+  --accent-ink: #1a0d14;
+  --essence: #ffe066;
+  --glass: #8fd8ff;
+  --error: #ff9b8a;
+  --code-bg: #0f101f;
+  --el-fire: #ffa77a;
+  --el-water: #5cc4d6;
+  --el-earth: #a6d47e;
+  --f-display: "Pixelify Sans", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans Thai", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, monospace;
+  --notch: polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px);
+  --dna-h: 46vh;
+  --handle-h: 44px;
+  color-scheme: dark;
+}
+
+html, body, #root { height: 100%; margin: 0; overflow: hidden; }
+body { background: var(--night); color: var(--ink); font: 500 17px/1.55 var(--f-body); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.game { position: fixed; inset: 0; min-width: 1024px; }
+.lab { position: absolute; inset: 0; }
+.lab canvas { display: block; image-rendering: pixelated; }
+
+/* Pixel frame: notched corners + a 2px bevel. */
+.topbar .res, .speeds, .quest, .orders, .bubble, .card, .machine, .tank, .reflog, .naming {
+  clip-path: var(--notch);
+  background: var(--panel);
+  box-shadow: inset 0 0 0 2px var(--edge), inset 0 -4px 0 0 rgba(0, 0, 0, .25);
+}
+
+/* HUD */
+.topbar { position: absolute; top: 12px; left: 16px; right: 16px; display: flex; align-items: center; gap: 10px; pointer-events: none; }
+.topbar > * { pointer-events: auto; }
+.logo { font: 700 22px var(--f-display); color: var(--accent); margin-right: 8px; text-shadow: 0 2px 0 #4a1f33; }
+.res { display: flex; align-items: center; gap: 8px; padding: 6px 14px 8px; color: var(--muted); font-size: 15px; cursor: help; }
+.res i { font-style: normal; font-size: 17px; }
+.res b { font: 600 18px var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+.res-essence i { color: var(--essence); }
+.res-crystal i { color: var(--glass); }
+.res-mana i { color: var(--accent); }
+.speeds { margin-left: auto; display: flex; gap: 2px; padding: 4px; }
+.speeds button { font: 600 15px var(--f-display); padding: 4px 12px; border: 0; background: transparent; cursor: pointer; clip-path: var(--notch); }
+.speeds button:hover:not(:disabled) { background: var(--panel-hi); }
+.speeds button:disabled { cursor: help; color: var(--muted); opacity: .7; }
+.speeds button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+
+/* Quest card */
+.side { position: absolute; top: 68px; left: 16px; display: flex; flex-direction: column; gap: 12px; }
+.quest { width: 380px; padding: 12px 18px 16px; font-size: 16px; }
+.quest-head { display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font: 600 13px var(--f-display); letter-spacing: .08em; text-transform: uppercase; }
+.quest-head b { font: 600 16px var(--f-mono); color: var(--essence); letter-spacing: 0; }
+.quest-title { margin: 6px 0 8px; font: 600 18px/1.4 var(--f-body); }
+.quest-hint { margin: 0; }
+.quest-missing { margin: 8px 0 0; color: var(--essence); font-size: 15px; }
+.quest-hint code { font: 14px/1.55 var(--f-mono); color: var(--glass); }
+.quest-bar { height: 8px; margin: 2px 0 10px; background: var(--night); clip-path: var(--notch); }
+.quest-bar em { display: block; height: 100%; background: var(--essence); transform-origin: left; transition: transform .3s; }
+.quest-go { margin-top: 12px; padding: 6px 14px 8px; border: 0; cursor: pointer; font: 600 15px var(--f-display); background: var(--panel-hi); clip-path: var(--notch); box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .25), inset 0 2px 0 var(--glass); }
+.quest-go:hover { background: #343a72; }
+
+/* Ref: robot + speech bubble, bottom right, above the closed drawer */
+.refbot { position: absolute; right: 16px; bottom: calc(var(--handle-h) + 14px); display: flex; align-items: flex-end; gap: 10px; transition: bottom .28s cubic-bezier(.2, .8, .2, 1); }
+.dna-open .refbot { bottom: calc(var(--dna-h) + 14px); }
+.bot { border: 0; background: none; padding: 0; cursor: pointer; animation: hover-bob 2.4s ease-in-out infinite; }
+.bot canvas { display: block; image-rendering: pixelated; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .35)); }
+.bubble { max-width: 460px; padding: 12px 18px 14px; font-size: 16px; }
+.bubble p { margin: 0 0 4px; }
+.bubble p:last-child { margin-bottom: 0; }
+.bubble .error { color: var(--error); }
+.bubble .instruction { font: 600 18px/1.5 var(--f-body); white-space: pre-line; color: var(--ink); }
+.reflog { position: absolute; right: 0; bottom: calc(100% + 10px); width: 460px; max-height: 50vh; display: flex; flex-direction: column; padding: 12px 16px; }
+.reflog h2 { margin: 0 0 6px; font: 700 17px var(--f-display); color: var(--accent); }
+.ref { overflow-y: auto; font-size: 15px; }
+.ref p { margin: 0 0 4px; }
+.ref .error { color: var(--error); }
+
+/* Creature card (follows the creature) */
+.card { position: absolute; left: 0; top: 0; width: 230px; margin: -44px 0 0 36px; padding: 12px 16px 14px; font-size: 14px; pointer-events: none; }
+.card-head b { display: block; font: 700 18px var(--f-display); }
+.card-head span { color: var(--muted); }
+.stat { display: grid; grid-template-columns: 76px 1fr; align-items: center; gap: 8px; margin-top: 6px; }
+.stat i { height: 8px; background: var(--night); clip-path: var(--notch); }
+.stat em { display: block; height: 100%; transform-origin: left; transition: transform .2s; }
+.stat-hp em { background: #ff7a8a; }
+.stat-energy em { background: var(--essence); }
+.stat-hunger em { background: var(--el-fire); }
+
+/* Tutorial arrow */
+.pointer { position: absolute; left: 0; top: 0; pointer-events: none; }
+.pointer span, .pointer-inline { display: block; color: var(--essence); font-size: 26px; text-shadow: 0 3px 0 #6b4f00; animation: beckon .7s ease-in-out infinite alternate; }
+.pointer span { margin: -46px 0 0 -10px; }
+
+/* DNA machine: drawer with the code editor */
+.dna {
+  position: absolute; left: 0; right: 0; bottom: 0; height: var(--dna-h);
+  transform: translateY(calc(100% - var(--handle-h)));
+  transition: transform .28s cubic-bezier(.2, .8, .2, 1);
+  display: flex; flex-direction: column;
+}
+.dna.open { transform: none; }
+.dna-handle {
+  position: relative; align-self: center; height: var(--handle-h); padding: 0 22px; display: flex; align-items: center; gap: 12px;
+  border: 0; cursor: pointer; background: var(--panel-hi); font: 600 15px var(--f-display);
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%, 0 10px);
+  box-shadow: inset 0 2px 0 var(--glass);
+}
+.dna-handle kbd { font: 12px var(--f-mono); color: var(--muted); }
+.dna-handle.beckon { background: #3b3470; }
+.dna-handle .pointer-inline { position: absolute; left: 50%; top: -34px; margin-left: -9px; }
+.helix {
+  width: 14px; height: 24px; flex: none;
+  background: repeating-linear-gradient(170deg, var(--accent) 0 3px, transparent 3px 6px, var(--glass) 6px 9px, transparent 9px 12px);
+  background-size: 100% 24px;
+  animation: helix 1.2s linear infinite;
+}
+.dna-body { position: relative; display: flex; flex: 1; min-height: 0; background: var(--code-bg); border-top: 2px solid var(--glass); box-shadow: 0 -12px 40px rgba(143, 216, 255, .12); }
+.tut-line { background: rgba(255, 224, 102, .16); animation: tut-glow 1s ease-in-out infinite alternate; }
+
+/* Starter pick */
+.starter { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: rgba(10, 10, 26, .78); }
+.starter h1 { margin: 0; font: 700 40px var(--f-display); color: var(--ink); text-shadow: 0 3px 0 #2a2e5c; }
+.starter-sub { margin: 0 0 22px; color: var(--muted); }
+.tanks { display: flex; gap: 22px; }
+.tank {
+  --tint: var(--glass);
+  width: 210px; padding: 18px 16px 18px; border: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  transition: transform .15s, opacity .15s;
+  box-shadow: inset 0 0 0 2px var(--edge), inset 0 -60px 50px -40px color-mix(in srgb, var(--tint) 40%, transparent);
+}
+.tank:hover { transform: translateY(-4px); }
+.tank[aria-checked="true"] { box-shadow: inset 0 0 0 3px var(--tint), inset 0 -80px 60px -40px color-mix(in srgb, var(--tint) 55%, transparent); transform: translateY(-6px); }
+.tank.dim { opacity: .5; }
+.tank canvas { width: 128px; height: 128px; image-rendering: pixelated; }
+.tank b { font: 700 19px var(--f-display); color: var(--tint); }
+.tank span { font-size: 13px; color: var(--muted); text-align: center; }
+.el-fire { --tint: var(--el-fire); }
+.el-water { --tint: var(--el-water); }
+.el-earth { --tint: var(--el-earth); }
+.naming { margin-top: 22px; display: flex; align-items: center; gap: 12px; padding: 12px 16px; transition: opacity .2s; }
+.naming.hidden { opacity: 0; pointer-events: none; }
+.naming label { color: var(--muted); font-size: 14px; }
+.naming input { width: 170px; padding: 6px 10px; font: 600 16px var(--f-display); color: var(--ink); background: var(--night); border: 2px solid var(--edge); }
+.naming input:focus { border-color: var(--accent); outline: none; }
+.hatch { padding: 8px 22px; border: 0; cursor: pointer; font: 700 17px var(--f-display); background: var(--accent); color: var(--accent-ink); clip-path: var(--notch); box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .2); }
+.hatch:hover { filter: brightness(1.08); }
+.skip { margin-top: 18px; border: 0; background: none; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; font-size: 13px; }
+.skip:hover { color: var(--ink); }
+
+@keyframes hover-bob { 50% { transform: translateY(-5px); } }
+@keyframes beckon { to { transform: translateY(6px); } }
+@keyframes helix { to { background-position: 0 24px; } }
+@keyframes tut-glow { to { background: rgba(255, 224, 102, .32); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* HUD tooltips: hover or keyboard focus */
+.tip { position: relative; display: flex; }
+.tip[data-tip]:hover::after, .tip[data-tip]:focus-visible::after {
+  content: attr(data-tip);
+  position: absolute; left: 0; top: calc(100% + 8px); z-index: 5; width: 300px; padding: 10px 14px;
+  font: 500 15px/1.5 var(--f-body); color: var(--ink); white-space: pre-line;
+  background: var(--panel); clip-path: var(--notch); box-shadow: inset 0 0 0 2px var(--edge);
+}
+.tip.flash .res-mana { animation: mana-out .6s ease-out; }
+@keyframes mana-out { 30% { background: #6b2433; box-shadow: inset 0 0 0 2px var(--error); } }
+
+/* Centre banner: quest done / new quest */
+.banner {
+  position: absolute; left: 50%; top: 30%; transform: translate(-50%, -50%); pointer-events: none; text-align: center;
+  padding: 18px 36px 22px; background: var(--panel); box-shadow: inset 0 0 0 3px var(--essence), 0 6px 0 rgba(0, 0, 0, .35); /* no clip-path: sparks fly outside */
+  animation: banner-in 2.2s ease-out forwards;
+}
+.banner small { display: block; font: 600 15px var(--f-display); color: var(--essence); letter-spacing: .1em; text-transform: uppercase; }
+.banner b { display: block; margin-top: 4px; font: 700 26px/1.3 var(--f-body); }
+.banner.done { box-shadow: inset 0 0 0 3px var(--essence), 0 0 0 999px rgba(255, 224, 102, .04); }
+.banner .spark { position: absolute; color: var(--essence); font-size: 18px; animation: spark 1.2s ease-out forwards; }
+@keyframes banner-in { 0% { opacity: 0; transform: translate(-50%, -40%) scale(.9); } 12% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 85% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes spark { from { opacity: 1; transform: translate(0, 0); } to { opacity: 0; transform: translate(var(--dx), var(--dy)); } }
+
+/* Professor Null's notebook (inside the DNA machine) */
+.dna-editor { flex: 1; min-width: 0; }
+.notebook { width: 420px; flex: none; display: flex; flex-direction: column; min-height: 0; padding: 12px 18px 0; background: #191a33; border-left: 2px solid var(--edge); }
+.notebook h2 { margin: 0 0 8px; font: 700 18px var(--f-display); color: var(--essence); }
+.nb-tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+.nb-tabs button { border: 0; cursor: pointer; padding: 4px 12px 6px; font: 600 15px var(--f-display); background: transparent; color: var(--muted); clip-path: var(--notch); }
+.nb-tabs button[aria-selected="true"] { background: var(--panel-hi); color: var(--ink); box-shadow: inset 0 2px 0 var(--essence); }
+.nb-page { overflow-y: auto; padding-bottom: 16px; }
+.nb-api { margin: 0; }
+.nb-api div { padding: 8px 0; border-bottom: 1px solid #2a2c50; }
+.nb-api dt code, .nb-preview code { font: 600 14px var(--f-mono); color: var(--glass); }
+.nb-api dd { margin: 4px 0 0; font-size: 15px; color: var(--muted); }
+.nb-text { margin: 0; white-space: pre-line; font-size: 15px; line-height: 1.6; }
+.nb-lesson { padding: 10px 0; border-bottom: 1px solid #2a2c50; }
+.nb-lesson h3 { margin: 0 0 6px; font: 700 16px var(--f-display); color: var(--ink); }
+.nb-lesson.locked h3, .nb-lesson.locked p { color: #6a6d94; }
+.nb-preview { display: flex; align-items: center; gap: 14px; margin: 12px 0; }
+.nb-preview canvas { width: 96px; height: 96px; image-rendering: pixelated; background: var(--panel); clip-path: var(--notch); }
+.nb-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; }
+.nb-chips b { width: 64px; font: 600 14px var(--f-mono); color: var(--essence); }
+.nb-chips button { border: 0; cursor: pointer; padding: 3px 10px 5px; font: 500 14px var(--f-mono); background: var(--panel-hi); clip-path: var(--notch); }
+.nb-chips button[aria-pressed="true"] { background: var(--glass); color: var(--night); }
+.nb-toggle { position: absolute; top: 8px; right: 8px; border: 0; cursor: pointer; padding: 2px 10px 4px; font: 600 15px var(--f-display); background: var(--panel-hi); color: var(--ink); clip-path: var(--notch); }
+
+/* Orders board card (under the quest card) */
+.orders { width: 380px; padding: 12px 18px 14px; }
+.orders-wait { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+.order { margin-top: 10px; }
+.order-head { display: flex; justify-content: space-between; gap: 12px; font-weight: 600; }
+.order-head b { font: 600 15px var(--f-mono); color: var(--glass); }
+.order-time { height: 4px; background: var(--night); }
+.order-time em { display: block; height: 100%; background: var(--accent); transform-origin: left; transition: transform .3s linear; }
+.reset { margin-top: 10px; align-self: flex-start; border: 0; cursor: pointer; padding: 4px 12px 6px; font: 600 14px var(--f-body); background: transparent; color: var(--muted); box-shadow: inset 0 0 0 2px var(--edge); }
+.reset.sure { color: var(--ink); background: #6b2433; box-shadow: inset 0 0 0 2px var(--error); }
+.boot { position: fixed; inset: 0; display: grid; place-items: center; font: 700 22px var(--f-display); color: var(--muted); }
+
+/* Research in the notebook */
+.nb-chips button.locked { color: #8a8db8; }
+.nb-chips button small { margin-left: 4px; font-size: 11px; color: var(--glass); }
+.nb-chips button[aria-pressed="true"] small { color: var(--night); }
+.nb-research { display: block; margin-top: 8px; border: 0; cursor: pointer; padding: 6px 14px 8px; font: 600 15px var(--f-display); background: var(--glass); color: var(--night); clip-path: var(--notch); }
+.nb-research:disabled { cursor: not-allowed; background: var(--panel-hi); color: var(--muted); }
+.nb-research small { display: block; font: 500 12px var(--f-body); }
+.nb-research-note { margin: 8px 0 0; font-size: 14px; color: var(--muted); }
+
+/* Machine upgrade card (opens under the clicked machine) */
+.machine { position: absolute; left: 0; top: 0; width: 280px; margin: 8px 0 0 -140px; padding: 12px 16px 14px; font-size: 15px; }
+.machine p { margin: 6px 0 0; }
+.machine-head { display: flex; align-items: baseline; gap: 10px; }
+.machine-head b { font: 700 18px var(--f-display); }
+.machine-head span { color: var(--essence); font: 600 13px var(--f-mono); }
+.machine-x { margin-left: auto; border: 0; background: none; cursor: pointer; font-size: 20px; line-height: 1; color: var(--muted); }
+.machine-next { color: var(--muted); }
+.machine-max { color: var(--essence); }
+.machine-buy { display: block; margin-top: 10px; border: 0; cursor: pointer; padding: 6px 14px 8px; font: 600 15px var(--f-display); background: var(--essence); color: var(--night); clip-path: var(--notch); }
+.machine-buy:disabled { cursor: not-allowed; background: var(--panel-hi); color: var(--muted); }
+.machine-buy small { display: block; font: 500 12px var(--f-body); }
+
+/* Codex page */
+.nb-codex { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px; }
+.nb-codex figure { margin: 0; text-align: center; }
+.nb-codex canvas { display: block; width: 64px; height: 64px; margin: 0 auto; image-rendering: pixelated; background: var(--panel); clip-path: var(--notch); }
+.nb-codex figcaption { font: 600 12px var(--f-display); color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nb-codex .unknown figcaption { color: var(--muted); }

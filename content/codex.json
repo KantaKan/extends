@@ -1,0 +1,18 @@
+{
+  "elementSyllables": {
+    "none": ["Mo", "Pu", "Lu"],
+    "fire": ["Flam", "Pyro", "Embe"],
+    "water": ["Bub", "Aqua", "Mizu"],
+    "earth": ["Moss", "Sprou", "Pebb"],
+    "air": ["Whi", "Zeph", "Fluf"],
+    "void": ["Nyx", "Umbr", "Glim"]
+  },
+  "bodySyllables": {
+    "blob": ["mochi", "lime", "bloop"],
+    "quad": ["pup", "paw", "mitt"],
+    "bird": ["chi", "pip", "tweet"],
+    "serpent": ["noodl", "sss", "coil"],
+    "bean": ["bean", "jelly", "pod"],
+    "puff": ["fluff", "puff", "mallow"]
+  }
+}

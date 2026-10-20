@@ -1,0 +1,17 @@
+{
+  "body:bean": 3,
+  "body:quad": 4,
+  "body:bird": 5,
+  "body:puff": 5,
+  "body:serpent": 6,
+  "eyes:dot": 2,
+  "eyes:happy": 2,
+  "eyes:sleepy": 2,
+  "eyes:sparkle": 3,
+  "eyes:surprised": 3,
+  "eyes:wink": 4,
+  "horns:small": 3,
+  "horns:big": 5,
+  "element:air": 6,
+  "element:void": 8
+}

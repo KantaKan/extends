@@ -1,0 +1,90 @@
+[
+  {
+    "id": "name-slime",
+    "goal": {
+      "type": "renamed"
+    },
+    "reward": {},
+    "textKey": "nameSlime"
+  },
+  {
+    "id": "gather-5",
+    "goal": {
+      "type": "gathered",
+      "count": 5
+    },
+    "reward": {
+      "lights": true
+    },
+    "textKey": "gather5"
+  },
+  {
+    "id": "eat-when-hungry",
+    "goal": {
+      "type": "ate",
+      "count": 1,
+      "needs": [
+        "if"
+      ]
+    },
+    "reward": {},
+    "textKey": "eatWhenHungry"
+  },
+  {
+    "id": "clear-field",
+    "goal": {
+      "type": "fieldCleared",
+      "needs": [
+        "loop"
+      ]
+    },
+    "reward": {},
+    "textKey": "clearField"
+  },
+  {
+    "id": "gather-function",
+    "goal": {
+      "type": "gathered",
+      "count": 6,
+      "needs": [
+        "function"
+      ]
+    },
+    "reward": {},
+    "textKey": "gatherFunction"
+  },
+  {
+    "id": "herd-10",
+    "goal": {
+      "type": "herd",
+      "count": 10,
+      "uniqueNames": true,
+      "needs": [
+        "loop"
+      ]
+    },
+    "reward": {},
+    "textKey": "herd10"
+  },
+  {
+    "id": "each-own-hunger",
+    "goal": {
+      "type": "eachAte",
+      "count": 5,
+      "needs": [
+        "this"
+      ]
+    },
+    "reward": {},
+    "textKey": "eachOwnHunger"
+  },
+  {
+    "id": "new-element",
+    "goal": {
+      "type": "subclass",
+      "changes": "element"
+    },
+    "reward": {},
+    "textKey": "newElement"
+  }
+]

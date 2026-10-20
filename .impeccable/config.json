@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "src/ui/app.css"
+        ],
+        "createdAt": "2026-10-18T16:52:57.929Z",
+        "reason": "user confirmed: .helix is the DNA handle icon"
+      },
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "src/ui/App.css"
+        ],
+        "createdAt": "2026-10-20T06:30:45.258Z",
+        "reason": "user confirmed: .helix is the DNA handle icon"
+      }
+    ]
+  }
+}

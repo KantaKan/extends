@@ -1,0 +1,518 @@
+<title>Extends Morph Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: lab bench — specimen stage + class code left, part drawers right; below, the parts × bodies contact sheet and the random fusion tank */
+:root{
+  --bg:#eceef7; --panel:#ffffff; --ink:#1e2036; --muted:#666a86; --line:#d8dbea;
+  --accent:#ff6f91; --accent-ink:#ffffff; --stage:#f5f6fc; --stage-dot:#dfe2f0;
+  --warn-bg:#fff1d6; --warn-ink:#7a4b00;
+  --code-bg:#1d1f34; --code-ink:#e4e6ff; --c-kw:#ff8fab; --c-cls:#8fd8ff; --c-str:#b8f0a0; --c-com:#8a8db0;
+  --ground:rgba(40,40,90,.16);
+  --f-display:"Pixelify Sans","IBM Plex Sans Thai",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Thai",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#13142a; --panel:#1c1e37; --ink:#ecedfb; --muted:#9b9dbc; --line:#2e3152;
+  --accent:#ff86a3; --accent-ink:#1a0d14; --stage:#23264a; --stage-dot:#2f3360;
+  --warn-bg:#3a2e14; --warn-ink:#ffd889;
+  --code-bg:#0f101f; --code-ink:#e4e6ff; --ground:rgba(0,0,0,.38); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#13142a; --panel:#1c1e37; --ink:#ecedfb; --muted:#9b9dbc; --line:#2e3152;
+  --accent:#ff86a3; --accent-ink:#1a0d14; --stage:#23264a; --stage-dot:#2f3360;
+  --warn-bg:#3a2e14; --warn-ink:#ffd889;
+  --code-bg:#0f101f; --code-ink:#e4e6ff; --ground:rgba(0,0,0,.38); color-scheme:dark}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.wrap{max-width:1120px;margin:0 auto;display:grid;gap:32px}
+h1,h2{font-family:var(--f-display);font-weight:700;margin:0;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:clamp(28px,4vw,40px);line-height:1.1}
+h2{font-size:22px}
+.lede{color:var(--muted);margin:6px 0 0;max-width:64ch}
+.count{display:inline-flex;gap:8px;align-items:baseline;margin-top:10px;font-size:14px;color:var(--muted)}
+.count b{font-family:var(--f-display);font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums}
+.main{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:860px){.main{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:14px;min-width:0}
+.idrow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.nick{font-family:var(--f-display);font-size:26px;font-weight:700;line-height:1}
+.tag{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stage{background:var(--stage);background-image:radial-gradient(var(--stage-dot) 1px,transparent 1px);background-size:10px 10px;border-radius:10px;display:grid;place-items:center;padding:12px 0}
+.stage canvas{width:320px;max-width:100%;aspect-ratio:1;image-rendering:pixelated;display:block}
+.rule{background:var(--warn-bg);color:var(--warn-ink);border-radius:10px;padding:8px 12px;font-size:13px}
+.sizes{display:flex;gap:18px;align-items:end;flex-wrap:wrap}
+.size{display:grid;gap:4px;justify-items:center;font-size:12px;color:var(--muted)}
+.size .box{background:var(--stage);border-radius:8px;padding:8px;display:grid;place-items:center}
+.size canvas{image-rendering:pixelated;display:block}
+.toggles{display:flex;gap:14px;flex-wrap:wrap;font-size:13px}
+.toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.toggles input{accent-color:var(--accent)}
+pre.code{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px 16px;font:13px/1.6 var(--f-mono);overflow-x:auto}
+.code .kw{color:var(--c-kw)} .code .cls{color:var(--c-cls)} .code .str{color:var(--c-str)} .code .com{color:var(--c-com)}
+.drawer{display:grid;gap:12px;padding-top:12px;border-top:1px solid var(--line)}
+.drawer:first-child{border-top:0;padding-top:0}
+.drawer h3{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:6px;min-width:0}
+legend{font-weight:600;font-size:13px;padding:0;margin-bottom:4px;display:flex;gap:8px;align-items:baseline}
+legend code{font:12px var(--f-mono);color:var(--muted);font-weight:400}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label{border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-size:14px;cursor:pointer;user-select:none;transition:background .12s,border-color .12s}
+.chips label:hover{border-color:var(--accent)}
+.chips input:checked+label{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.chips input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+button{font:600 14px var(--f-body);border-radius:10px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button:hover{filter:brightness(1.05)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sec{display:grid;gap:14px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+.sec-head p{margin:4px 0 0;color:var(--muted);max-width:62ch}
+.sheet-wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.sheet{display:grid;grid-template-columns:90px repeat(6,minmax(76px,1fr));gap:6px;min-width:560px;align-items:center}
+.sheet .hd{font-size:13px;font-weight:600;text-align:center;color:var(--muted)}
+.sheet .rh{font-size:13px;font-weight:600}
+.sheet .cell{background:var(--stage);border-radius:8px;display:grid;place-items:center;padding:4px 0}
+.sheet canvas{width:64px;height:64px;image-rendering:pixelated}
+.tank{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.spec{align-content:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:6px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.spec:hover{border-color:var(--accent)}
+.spec .box{background:var(--stage);border-radius:8px;display:grid;place-items:center;padding:6px 0}
+.spec canvas{width:96px;height:96px;image-rendering:pixelated}
+.spec b{font-family:var(--f-display);font-size:17px;line-height:1.1}
+.spec span{font-size:12px;color:var(--muted);line-height:1.4}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Morph Lab</h1>
+    <p class="lede">ทดสอบ art 32×32 ของเกม Extends: ทุกตัวประกอบจากชิ้นส่วนบนจุดยึดของร่าง เพิ่มร่างใหม่หรือชิ้นส่วนใหม่แล้วใช้กับของเดิมได้ทันที</p>
+    <div class="count">ผสมได้ <b id="count">0</b> แบบ จากชิ้นส่วน <span id="parts">0</span> ชิ้น</div>
+  </header>
+
+  <div class="main">
+    <section class="card" aria-label="ตัวอย่างสัตว์">
+      <div class="idrow">
+        <div><div class="tag">ชื่อเล่น</div><div class="nick" id="nick">Flammochi</div></div>
+        <div class="toggles">
+          <label><input type="checkbox" id="opt-rules" checked> กฎความน่ารัก</label>
+          <label><input type="checkbox" id="opt-grid"> กริด</label>
+          <label><input type="checkbox" id="opt-cheeks" checked> แก้มชมพู</label>
+        </div>
+      </div>
+      <div class="stage"><canvas id="main" width="320" height="320" aria-label="สัตว์ที่ประกอบแล้ว"></canvas></div>
+      <div class="rule" id="rule" hidden></div>
+      <div class="sizes">
+        <div class="size"><div class="box"><canvas id="x1" width="32" height="32"></canvas></div>ขนาดจริง ×1</div>
+        <div class="size"><div class="box"><canvas id="x2" width="64" height="64"></canvas></div>×2</div>
+        <div class="size"><div class="box"><canvas id="x3" width="96" height="96"></canvas></div>×3 ในเกม</div>
+      </div>
+      <pre class="code" id="code"></pre>
+    </section>
+
+    <section class="card" aria-label="ชิ้นส่วน">
+      <div id="drawers" style="display:grid;gap:14px"></div>
+      <div class="actions">
+        <button class="primary" id="btn-rand" type="button">สุ่มตัวนี้</button>
+        <button id="btn-reset" type="button">กลับเป็นสไลม์ธรรมดา</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="sec">
+    <div class="sec-head">
+      <div>
+        <h2>ตาราง ชิ้นส่วน × ร่าง</h2>
+        <p>เลือกหมวดชิ้นส่วน แล้วดูทุกตัวเลือกบนทุกร่างในหน้าเดียว ค่าอื่นใช้ตามตัวที่เลือกอยู่ด้านบน ใช้เช็คชิ้นใหม่ก่อนเอาเข้าเกม</p>
+      </div>
+      <div class="chips" id="sheet-pick"></div>
+    </div>
+    <div class="sheet-wrap"><div class="sheet" id="sheet"></div></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head">
+      <div>
+        <h2>สนามทดสอบผสม</h2>
+        <p>สุ่มทุกแกนแบบไม่เลือกหน้า ถ้าตัวไหนดูพังหรือไม่น่ารัก แปลว่าชิ้นส่วนหรือกฎนั้นต้องแก้ คลิกตัวไหนก็ได้เพื่อเปิดดูละเอียด</p>
+      </div>
+      <button class="primary" id="btn-tank" type="button">สุ่มผสม 12 ตัว</button>
+    </div>
+    <div class="tank" id="tank"></div>
+  </section>
+</div>
+
+<script>
+(() => {
+const N = 32;
+const PAL = {
+  none:  {b:'#9ed8ff', l:'#dbf2ff', s:'#6fb0e4', o:'#2a4670'},
+  fire:  {b:'#ffa77a', l:'#ffdcc4', s:'#ec7653', o:'#6b2a2c'},
+  water: {b:'#5cc4d6', l:'#b4eff4', s:'#3a95b6', o:'#173d55'},
+  earth: {b:'#a6d47e', l:'#dcf3c0', s:'#78ab56', o:'#2b4922'},
+  air:   {b:'#cdf3e6', l:'#f6fffc', s:'#92d4bf', o:'#2a5a50'},
+  void:  {b:'#b9a3f5', l:'#e7deff', s:'#8b71db', o:'#32256a'}
+};
+const C = {white:'#ffffff', pink:'#ffb0c4', cheek:'#ff94b2', beak:'#ffb347', beakD:'#e5832a',
+  hornB:'#fff0c4', hornS:'#e5c98a', wingS:'#dde2f2', fy:'#ffe066', fo:'#ff8a3d', fr:'#ff5a3d',
+  leaf:'#7dcf5a', leafD:'#4f9a3a', mouthIn:'#ff6f8a', bub:'#e6fbff', star:'#fff7c2', cream:'#fffaf2'};
+
+// colour helpers for tones
+function hexToHsl(h){ const n = parseInt(h.slice(1),16); const r=(n>>16&255)/255, g=(n>>8&255)/255, b=(n&255)/255;
+  const mx=Math.max(r,g,b), mn=Math.min(r,g,b); let H=0, S=0; const L=(mx+mn)/2;
+  if(mx!==mn){ const d=mx-mn; S = L>.5 ? d/(2-mx-mn) : d/(mx+mn); H = mx===r ? (g-b)/d+(g<b?6:0) : mx===g ? (b-r)/d+2 : (r-g)/d+4; H*=60; }
+  return [H,S,L]; }
+function hslToHex(H,S,L){ H=((H%360)+360)%360; const f = n => { const k=(n+H/30)%12, a=S*Math.min(L,1-L); const c=L-a*Math.max(-1,Math.min(k-3,9-k,1)); return Math.round(c*255).toString(16).padStart(2,'0'); }; return '#'+f(0)+f(8)+f(4); }
+const shift = (hex, dh, dl=0) => { const [h,s,l] = hexToHsl(hex); return hslToHex(h+dh, s, Math.max(0, Math.min(1, l+dl))); };
+const palCache = new Map();
+function palOf(el, tone){
+  const key = el + tone; if(palCache.has(key)) return palCache.get(key);
+  const p = PAL[el]; const dh = tone==='warm' ? -20 : tone==='cool' ? 22 : tone==='shiny' ? 150 : 0;
+  const out = dh ? {b:shift(p.b,dh), l:shift(p.l,dh), s:shift(p.s,dh), o:shift(p.o,dh)} : p;
+  palCache.set(key, out); return out;
+}
+
+// ---------- bodies: each declares its shape and anchors ----------
+const sup = (dx, dy, e) => Math.pow(Math.abs(dx), e) + Math.pow(Math.abs(dy), e) <= 1;
+const SIZE = {s:.82, m:1, l:1.12};
+const BODY = {
+  blob(s,k){ const rx=(11+s*.8)*k, tr=(11-s*1.2)*k, bot=8*k, cy=29-bot;
+    return {inside(x,y){const px=x+.5, py=y+.5, dx=(px-16)/rx; if(py<cy){const dy=(py-cy)/tr; return dx*dx+dy*dy<=1;} const dy=(py-cy)/bot; return py<29 && dx**4+dy**4<=1;},
+      ecx:16, ey:Math.round(cy-tr*.3), mx:16, sh:{cx:16, cy:cy-1, rx, ry:tr}, wingY:Math.round(cy-1), tailY:Math.round(cy+3*k), gloss:true}; },
+  quad(s,k){ const rx=(10+s*.7)*k, ry=(7.5-s*.8)*k, cy=26.6-ry+s*.3; const o=Math.round(rx*.78), i=Math.max(2,Math.round(rx*.22));
+    const legs = new Set([16-o-1,16-o,15+o,16+o,16-i-1,16-i,15+i,16+i]);
+    return {inside(x,y){const px=x+.5, py=y+.5; if(sup((px-16)/rx,(py-cy)/ry,2.4)) return true; return y>=24 && y<=28 && legs.has(x);},
+      ecx:16, ey:Math.round(cy-1), mx:16, sh:{cx:16, cy, rx, ry}, wingY:Math.round(cy), tailY:Math.round(cy+2)}; },
+  bird(s,k){ const rx=(9+s*.7)*k, ry=(9-s*.8)*k, cy=27.6-ry+s*.3;
+    return {inside(x,y){return sup((x+.5-16)/rx,(y+.5-cy)/ry,2.1);},
+      ecx:16, ey:Math.round(cy-2*k), mx:16, sh:{cx:16, cy, rx, ry}, wingY:Math.round(cy+1), tailY:Math.round(cy+3*k), feet:true, beak:true}; },
+  serpent(s,k){ const crx=(11+s*.6)*k, cry=(3.8-s*.3)*k, ccy=28.8-cry, ny=ccy-4.6*k, hrx=(6.8+s*.5)*k, hry=(6.4-s*.6)*k, hy=ny-5.6*k;
+    return {inside(x,y){const px=x+.5, py=y+.5; return sup((px-17)/hrx,(py-hy)/hry,2.2) || sup((px-16)/(4.6*k),(py-ny)/(4.2*k),2) || (py<29 && sup((px-15)/crx,(py-ccy)/cry,2.2));},
+      ecx:17, ey:Math.round(hy), mx:16, sh:{cx:17, cy:hy, rx:hrx, ry:hry}, wingY:Math.round(ny), tailY:Math.round(ccy-1)}; },
+  bean(s,k){ const rx=(7.6+s*.7)*k, ry=(11-s*1)*k, cy=28.8-ry;
+    return {inside(x,y){return sup((x+.5-16)/rx,(y+.5-cy)/ry,2.3);},
+      ecx:16, ey:Math.round(cy-ry*.22), mx:16, sh:{cx:16, cy, rx, ry}, wingY:Math.round(cy+1), tailY:Math.round(cy+ry*.45), gloss:true}; },
+  puff(s,k){ const R=9.8*k, rx=R*(1+s*.08), ry=R*(1-s*.1), cy=28.6-ry;
+    return {inside(x,y){const dx=(x+.5-16)/rx, dy=(y+.5-cy)/ry; const a=Math.atan2(dy,dx); return Math.sqrt(dx*dx+dy*dy) <= 1 + .1*Math.cos(10*a);},
+      ecx:16, ey:Math.round(cy-1), mx:16, sh:{cx:16, cy, rx, ry}, wingY:Math.round(cy), tailY:Math.round(cy+3*k)}; }
+};
+
+const PAT = {
+  hornsmall:['#..','##.','#l#','###','###'],
+  hornbig:['#...','##..','.##.','.#l#','.###','####'],
+  earcat:['#....','##...','#p#..','#pp#.','#ppp#','#####'],
+  earbunny:['.#.','#l#','#p#','#p#','#p#','###','###'],
+  earround:['.##.','#pp#','#pp#','####'],
+  wingsmall:['....##','..####','.#####','######','.##.##'],
+  wingbig:['.....###','...#####','.#######','########','.#######','..#.#.##'],
+  tailpuff:['.##.','####','####','.##.'],
+  tailspike:['....#','...##','..###','#####'],
+  fire1:['.y.','yy.','yoy','oro','ooo'],
+  fire2:['.y.','.yy','yoy','oro','ooo'],
+  sprout1:['gg.gg','.gdg.','..d..','..d..'],
+  sprout2:['.gg.gg','..gdg.','...d..','..d...']
+};
+const ACC = {
+  bow:   {pat:['r...r','rrdrr','r...r'], map:{r:'#ff6f91',d:'#c93a63'}, slot:'inner'},
+  flower:{pat:['.f.','fcf','.f.'], map:{f:'#ffffff',c:'#ffd23f'}, slot:'inner'},
+  tophat:{pat:['.kkk.','.kkk.','.rrr.','kkkkk'], map:{k:'#3b3b58',r:'#ff6f91'}, slot:'center'},
+  crown: {pat:['y.y.y','yyyyy','yrygy'], map:{y:'#ffd23f',r:'#ff5a7a',g:'#5ac8ff'}, slot:'center'}
+};
+const EYE = {dot:['wk','kk'], big:['wk','kk','kk'], happy:['.k.','k.k'], sleepy:['kkk'], sparkle:['wkk','kkk','kkw'], surprised:['kkk','k.k','kkk']};
+const SPOTS = [[-.55,-.4],[.45,-.62],[.66,.14],[-.7,.3],[.08,-.78],[.38,.62]];
+
+const tuftOf = st => ['fire','earth'].includes(st.element) ? st.element : (['fire','earth'].includes(st.element2) ? st.element2 : null);
+
+// ---------- cuteness rules: one item per slot, head budget 3 ----------
+function resolve(st, rules){
+  const e = {...st}, dropped = [];
+  if(!rules) return {e, dropped};
+  const tuft = tuftOf(st);
+  if(e.acc !== 'none' && ACC[e.acc].slot === 'center' && tuft){ e.acc = 'none'; dropped.push(`ของตกแต่ง (ชนกับ${tuft==='fire'?'เปลวไฟ':'ต้นอ่อน'}กลางหัว)`); }
+  if(e.acc !== 'none' && ACC[e.acc].slot === 'inner' && e.horns !== 'none'){ e.acc = 'none'; dropped.push('ของตกแต่ง (ชนกับเขา)'); }
+  let cost = (e.horns==='small'?1:e.horns==='big'?2:0) + (e.ears==='bunny'?2:e.ears!=='none'?1:0) + (e.acc!=='none'?1:0) + (tuft?1:0);
+  if(cost > 3 && e.acc !== 'none'){ e.acc = 'none'; cost--; dropped.push('ของตกแต่ง (หัวรกเกินงบ 3 แต้ม)'); }
+  if(cost > 3 && e.ears !== 'none'){ cost -= e.ears==='bunny'?2:1; e.ears = 'none'; dropped.push('หู (หัวรกเกินงบ 3 แต้ม)'); }
+  return {e, dropped};
+}
+
+function render(ctx, st, sc, t, phase, opt){
+  const tick = Math.floor((t+phase)/160);
+  const s = opt.still ? 0 : [0,0,1,0,-1,0][tick % 6];
+  const blink = !opt.still && ((t+phase) % (3000 + phase % 1700)) < 150;
+  const flap = opt.still ? 0 : (tick % 2 ? -1 : 0);
+  const b = BODY[st.body](s, SIZE[st.size]);
+  const pal = palOf(st.element, st.tone);
+  const dual = st.element2 !== 'none' && st.element2 !== st.element;
+  const mp = dual ? palOf(st.element2, st.tone) : null;
+  const M = []; for(let y=0;y<N;y++){ const row=[]; for(let x=0;x<N;x++) row.push(b.inside(x,y)); M.push(row); }
+  const I = (x,y) => x>=0 && x<N && y>=0 && y<N && M[y][x];
+  const topAt = x => { for(let y=0;y<N;y++) if(I(x,y)) return y; return N; };
+  const edges = y => { let lo=N, hi=-1; for(let x=0;x<N;x++) if(I(x,y)){ if(x<lo) lo=x; if(x>hi) hi=x; } return [lo, hi]; };
+  const sil = Array.from({length:N}, () => Array(N).fill(null));
+  const over = Array.from({length:N}, () => Array(N).fill(null));
+  const set = (g,x,y,c) => { if(x>=0 && x<N && y>=0 && y<N) g[y][x] = c; };
+  function stamp(pat, x0, yBottom, cmap, mirrorAt, fillDown){
+    const h = pat.length, w = pat[0].length;
+    const put = mir => {
+      const X = c => { const x = x0 + c; return mir == null ? x : 2*mir - 1 - x; };
+      for(let r=0;r<h;r++) for(let c=0;c<w;c++){ const ch = pat[r][c]; if(ch === '.') continue; set(sil, X(c), yBottom-(h-1-r), cmap[ch]); }
+      if(fillDown) for(let c=0;c<w;c++){
+        let r = h-1; while(r>=0 && pat[r][c] === '.') r--; if(r<0) continue;
+        const col = cmap[pat[r][c]], x = X(c); let y = yBottom-(h-1-r)+1, n = 0;
+        while(y<N && n<5 && !I(x,y)){ set(sil,x,y,col); y++; n++; }
+      }
+    };
+    put(null); if(mirrorAt != null) put(mirrorAt);
+  }
+  // back layer
+  if(st.wings !== 'none'){ const p = PAT['wing'+st.wings], w = p[0].length, h = p.length; const le = edges(b.wingY)[0];
+    stamp(p, le + 1 - (w-1), b.wingY + Math.floor(h/2) + flap, {'#':C.white,'l':C.white,'s':C.wingS}, b.mx, false); }
+  if(st.tail !== 'none'){ const re = edges(b.tailY)[1]; stamp(PAT['tail'+st.tail], re - 1, b.tailY + 1, {'#':pal.b,'l':pal.l}, null, false); }
+  const hornR = b.ecx - 3, earR = st.horns !== 'none' ? b.ecx - 6 : b.ecx - 5;
+  const headBase = (x0, w, add) => { let v = topAt(x0 + Math.floor(w/2)); if(v > b.ey) v = topAt(b.ecx); return v + add; };
+  if(st.ears !== 'none'){ const p = PAT['ear'+st.ears], w = p[0].length, x0 = earR - (w-1); stamp(p, x0, headBase(x0,w,2), {'#':pal.b,'l':pal.l,'p':C.pink}, b.ecx, true); }
+  if(st.horns !== 'none'){ const p = PAT['horn'+st.horns], w = p[0].length, x0 = hornR - (w-1); stamp(p, x0, headBase(x0,w,1), {'#':C.hornB,'l':C.white,'s':C.hornS}, b.ecx, true); }
+  // body + edge shading + markings
+  const mk = st.markings !== 'none' ? st.markings : (dual ? 'twotone' : 'none');
+  const MC = {
+    light:[mp ? mp.l : C.cream, mp ? mp.b : pal.l],
+    dark:[mp ? mp.s : shift(pal.s,0,-.07), mp ? shift(mp.s,0,-.08) : shift(pal.s,0,-.14)],
+    base:[mp ? mp.b : pal.l, mp ? mp.s : pal.s]
+  };
+  for(let y=0;y<N;y++) for(let x=0;x<N;x++){
+    if(!I(x,y)) continue;
+    let c = pal.b, band = 0;
+    if(!I(x,y+1) || (!I(x,y+2) && x > b.mx-4) || (!I(x+2,y) && y > b.ey)){ c = pal.s; band = 1; }
+    else if((!I(x,y-2) && x < b.mx+2) || (!I(x-2,y) && y < b.ey+1)) c = pal.l;
+    if(mk !== 'none'){
+      const u = (x+.5-b.sh.cx)/b.sh.rx, v = (y+.5-b.sh.cy)/b.sh.ry; let m = null;
+      if(mk==='belly' && u*u/.3 + (v-.6)*(v-.6)/.28 <= 1) m = 'light';
+      else if(mk==='spots' && SPOTS.some(([su,sv]) => { const dx=(u-su)*b.sh.rx, dy=(v-sv)*b.sh.ry; return dx*dx+dy*dy <= 2.3; })) m = 'dark';
+      else if(mk==='stripes' && v < .2 && y % 3 === 0 && Math.abs(u) < .85) m = 'dark';
+      else if(mk==='mask' && y >= b.ey-1 && y <= b.ey+1 && Math.abs(u) > .12 && Math.abs(u) < .82) m = 'dark';
+      else if(mk==='twotone' && v > .2) m = 'base';
+      if(m) c = MC[m][band];
+    }
+    sil[y][x] = c;
+  }
+  if(b.feet) [[12,28],[13,28],[18,28],[19,28]].forEach(([x,y]) => set(sil,x,y,C.beak));
+  const tuft = tuftOf(st);
+  if(tuft === 'fire') stamp(tick%2 ? PAT.fire2 : PAT.fire1, b.ecx-2, topAt(b.ecx)+1, {y:C.fy,o:C.fo,r:C.fr}, null, false);
+  if(tuft === 'earth') stamp(tick%4<2 ? PAT.sprout1 : PAT.sprout2, b.ecx-3, topAt(b.ecx-1), {g:C.leaf,d:C.leafD}, null, false);
+  if(st.acc !== 'none'){ const a = ACC[st.acc];
+    if(a.slot === 'center') stamp(a.pat, b.ecx-3, topAt(b.ecx), a.map, null, false);
+    else stamp(a.pat, b.ecx+3, topAt(b.ecx+5)+1, a.map, null, false); }
+  // outline
+  const out = Array.from({length:N}, () => Array(N).fill(null));
+  for(let y=0;y<N;y++) for(let x=0;x<N;x++){
+    if(sil[y][x]) continue;
+    if((y>0 && sil[y-1][x]) || (y<N-1 && sil[y+1][x]) || (x>0 && sil[y][x-1]) || (x<N-1 && sil[y][x+1])) out[y][x] = pal.o;
+  }
+  if(b.gloss){ const gx = Math.round(b.sh.cx - b.sh.rx*.55), gy = Math.round(b.sh.cy - b.sh.ry*.5);
+    [[gx,gy],[gx+1,gy],[gx,gy+1]].forEach(([x,y]) => { if(I(x,y)) set(sil,x,y,C.white); }); }
+  // face: always the top layer
+  const k = pal.o, cx = b.ecx, ey = b.ey;
+  const eyeAt = (name, left) => {
+    let p = EYE[name]; if(blink) p = ['k'.repeat(p[0].length)];
+    const w = p[0].length, h = p.length, x0 = left ? cx-3-w : cx+3, y0 = ey - Math.floor(h/2) + (name==='sleepy' ? 1 : 0);
+    for(let r=0;r<h;r++) for(let c=0;c<w;c++){ const ch = p[r][c]; if(ch === '.') continue; set(sil, x0+c, y0+r, ch==='w' ? C.white : k); }
+  };
+  if(st.eyes === 'wink'){ eyeAt('big', true); eyeAt('happy', false); } else { eyeAt(st.eyes, true); eyeAt(st.eyes, false); }
+  if(st.cheeks) [[cx-6,ey+2],[cx-5,ey+2],[cx+4,ey+2],[cx+5,ey+2]].forEach(([x,y]) => { if(I(x,y)) set(sil,x,y,C.cheek); });
+  const my = ey + 3;
+  if(b.beak){ set(sil,cx-1,ey+2,C.beak); set(sil,cx,ey+2,C.beak); set(sil,cx-1,ey+3,C.beakD); set(sil,cx,ey+3,C.beakD); }
+  else if(st.eyes==='happy' || st.eyes==='sparkle'){ for(let x=cx-2;x<=cx+1;x++) set(sil,x,my,k); set(sil,cx-1,my+1,C.mouthIn); set(sil,cx,my+1,C.mouthIn); }
+  else if(st.eyes==='surprised'){ set(sil,cx-1,my,k); set(sil,cx,my,k); set(sil,cx-1,my+1,k); set(sil,cx,my+1,k); }
+  else if(st.eyes==='sleepy'){ set(sil,cx-1,my,k); set(sil,cx,my,k); }
+  else { set(sil,cx-2,my,k); set(sil,cx+1,my,k); set(sil,cx-1,my+1,k); set(sil,cx,my+1,k); }
+  // particles for each element (+ shiny sparkle)
+  const tt = opt.still ? 0 : t + phase;
+  const els = [st.element]; if(dual) els.push(st.element2);
+  els.forEach(el => {
+    const P = palOf(el, st.tone);
+    if(el==='fire'){ const top = topAt(b.ecx); [-6,5].forEach((dx,i) => { const y = top - 1 - Math.floor((tt/140 + i*5) % 7); set(over, b.ecx+dx, y, i ? C.fy : C.fo); }); }
+    if(el==='water'){ [[-13,0],[12,3],[-11,6]].forEach(([dx,o]) => { const y = 27 - Math.floor((tt/170 + o) % 14); set(over, b.mx+dx, y, C.bub); set(over, b.mx+dx, y+1, P.s); }); }
+    if(el==='air'){ [0,2.1,4.2].forEach(o => { const a = tt/700 + o, x = Math.round(16 + Math.cos(a)*14), y = Math.round(18 + Math.sin(a)*6); for(let j=0;j<3;j++) set(over, x - j*(Math.sin(a)>0?1:-1), y, j ? P.s : C.white); }); }
+    if(el==='void'){ [[3,6,0],[28,9,1.3],[5,22,2.6],[27,24,3.9]].forEach(([x,y,o]) => { const v = Math.sin(tt/400 + o); if(v > -.2){ set(over,x,y,C.star); if(v > .5){ set(over,x-1,y,P.l); set(over,x+1,y,P.l); set(over,x,y-1,P.l); set(over,x,y+1,P.l); } } }); }
+  });
+  if(st.tone === 'shiny'){ [[6,9,0],[25,5,2],[24,17,4]].forEach(([x,y,o]) => { if(((tick + o) % 6) < 3){ set(over,x,y,C.white); set(over,x-1,y,C.star); set(over,x+1,y,C.star); set(over,x,y-1,C.star); set(over,x,y+1,C.star); } }); }
+  // paint
+  ctx.clearRect(0, 0, N*sc, N*sc);
+  const [lo, hi] = edges(27); const hw = Math.max(4, (hi-lo)/2 + 1);
+  ctx.fillStyle = opt.ground;
+  for(let x=0;x<N;x++){ const d = Math.abs(x+.5-b.mx); if(d <= hw) ctx.fillRect(x*sc, 29*sc, sc, sc); if(d <= hw-3) ctx.fillRect(x*sc, 30*sc, sc, sc); }
+  for(let y=0;y<N;y++) for(let x=0;x<N;x++){ const c = over[y][x] || sil[y][x] || out[y][x]; if(c){ ctx.fillStyle = c; ctx.fillRect(x*sc, y*sc, sc, sc); } }
+  if(opt.grid){ ctx.strokeStyle = opt.gridColor; ctx.lineWidth = 1; ctx.beginPath();
+    for(let i=1;i<N;i++){ ctx.moveTo(i*sc+.5,0); ctx.lineTo(i*sc+.5,N*sc); ctx.moveTo(0,i*sc+.5); ctx.lineTo(N*sc,i*sc+.5); } ctx.stroke(); }
+}
+
+// ---------- UI ----------
+const OPTS = {
+  body:[['blob','สไลม์'],['quad','สี่ขา'],['bird','นก'],['serpent','งู'],['bean','เม็ดถั่ว'],['puff','ขนปุย']],
+  size:[['s','เล็ก'],['m','กลาง'],['l','ใหญ่']],
+  element:[['none','ธรรมดา'],['fire','ไฟ'],['water','น้ำ'],['earth','ดิน'],['air','ลม'],['void','ความว่าง']],
+  element2:[['none','ไม่มี'],['fire','ไฟ'],['water','น้ำ'],['earth','ดิน'],['air','ลม'],['void','ความว่าง']],
+  tone:[['base','ปกติ'],['warm','อุ่น'],['cool','เย็น'],['shiny','หายาก']],
+  markings:[['none','ไม่มี'],['belly','ท้องขาว'],['spots','จุด'],['stripes','ลายขวาง'],['mask','หน้ากาก'],['twotone','สองโทน']],
+  eyes:[['big','กลมโต'],['dot','จุด'],['happy','ยิ้ม'],['sleepy','ง่วง'],['sparkle','ประกาย'],['surprised','ตกใจ'],['wink','ขยิบตา']],
+  horns:[['none','ไม่มี'],['small','เล็ก'],['big','ใหญ่']],
+  ears:[['none','ไม่มี'],['cat','แมว'],['bunny','กระต่าย'],['round','กลม']],
+  wings:[['none','ไม่มี'],['small','เล็ก'],['big','ใหญ่']],
+  tail:[['none','ไม่มี'],['puff','ปุย'],['spike','แหลม']],
+  acc:[['none','ไม่มี'],['bow','โบว์'],['flower','ดอกไม้'],['tophat','หมวก'],['crown','มงกุฎ']]
+};
+const LABEL = {body:'ร่าง',size:'ขนาด',element:'ธาตุหลัก',element2:'ธาตุรอง',tone:'โทนสี',markings:'ลาย',eyes:'ตา',horns:'เขา',ears:'หู',wings:'ปีก',tail:'หาง',acc:'ของตกแต่ง'};
+const DRAWERS = [['ร่าง · base class',['body','size']],['สีและยีน',['element','element2','tone','markings']],['หน้า',['eyes']],['ชิ้นส่วน',['horns','ears','wings','tail','acc']]];
+const BASE = {blob:'Slime',quad:'Pup',bird:'Chick',serpent:'Noodle',bean:'Bean',puff:'Puff'};
+const PRE = {none:'',fire:'Fire',water:'Aqua',earth:'Moss',air:'Breeze',void:'Void'};
+const ELS = ['none','fire','water','earth','air','void'];
+const FUSE = {'fire+water':['Steam','ไอน้ำ'],'fire+earth':['Lava','ลาวา'],'fire+air':['Blaze','เปลวเพลิง'],'fire+void':['Ember','ถ่านไฟ'],'water+earth':['Swamp','หนองน้ำ'],'water+air':['Storm','พายุ'],'water+void':['Abyss','ห้วงลึก'],'earth+air':['Dust','ฝุ่น'],'earth+void':['Fossil','ฟอสซิล'],'air+void':['Nebula','เนบิวลา']};
+const GENE = {fire:'Fire',water:'Water',earth:'Earth',air:'Air',void:'Void',belly:'Belly',spots:'Spots',stripes:'Stripes',mask:'Mask',twotone:'TwoTone',bow:'Bow',flower:'Flower',tophat:'TopHat',crown:'Crown'};
+const ES = {none:['Mo','Pu','Lu'],fire:['Flam','Pyro','Embe'],water:['Bub','Aqua','Mizu'],earth:['Moss','Sprou','Pebb'],air:['Whi','Zeph','Fluf'],void:['Nyx','Umbr','Glim']};
+const BS = {blob:['mochi','lime','bloop'],quad:['pup','paw','mitt'],bird:['chi','pip','tweet'],serpent:['noodl','sss','coil'],bean:['bean','jelly','pod'],puff:['fluff','puff','mallow']};
+const lbl = (g,v) => OPTS[g].find(o => o[0] === v)[1];
+const DEFAULT = {body:'blob', size:'m', element:'none', element2:'none', tone:'base', markings:'none', eyes:'big', horns:'none', ears:'none', wings:'none', tail:'none', acc:'none', cheeks:true};
+let state = {...DEFAULT, element:'fire', horns:'small'};
+
+function fusion(st){ const a = st.element, b = st.element2;
+  if(b === 'none' || b === a) return null; if(a === 'none') return null;
+  const key = ELS.indexOf(a) < ELS.indexOf(b) ? a+'+'+b : b+'+'+a; return FUSE[key]; }
+function hash(str){ let h = 2166136261; for(const ch of str){ h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function nickOf(st){ const h = hash(JSON.stringify(st)); const el = st.element === 'none' && st.element2 !== 'none' ? st.element2 : st.element; return ES[el][h%3] + BS[st.body][(h>>>4)%3]; }
+function classOf(st){ const f = fusion(st); const pre = f ? f[0] : (PRE[st.element] || PRE[st.element2]); const n = pre + (st.wings !== 'none' ? 'Sky' : '') + BASE[st.body]; return n === BASE[st.body] ? 'My' + n : n; }
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[c]);
+function codeOf(st){
+  const cls = classOf(st), lines = [];
+  const prop = (k,v) => lines.push(`  ${k} = <span class="str">"${v}"</span>`);
+  if(st.element !== 'none') prop('element', st.element);
+  prop('eyes', st.eyes);
+  ['horns','ears','wings','tail'].forEach(k => { if(st[k] !== 'none') prop(k, st[k]); });
+  if(!st.cheeks) lines.push('  cheeks = <span class="kw">false</span>');
+  const genes = [];
+  if(st.element2 !== 'none' && st.element2 !== st.element) genes.push(GENE[st.element2]);
+  if(st.markings !== 'none') genes.push(GENE[st.markings]);
+  if(st.acc !== 'none') genes.push(GENE[st.acc]);
+  const args = [];
+  if(st.size !== 'm') args.push(`size: <span class="str">"${st.size === 's' ? 'small' : 'large'}"</span>`);
+  if(st.tone !== 'base') args.push(`tone: <span class="str">"${st.tone}"</span>`);
+  if(genes.length) args.push(`genes: [${genes.map(g => `<span class="cls">${g}</span>`).join(', ')}]`);
+  const name = `<span class="str">"${esc(nickOf(st))}"</span>`;
+  const call = args.length ? `(${name}, {\n  ${args.join(',\n  ')}\n})` : `(${name})`;
+  return `<span class="kw">class</span> <span class="cls">${cls}</span> <span class="kw">extends</span> <span class="cls">${BASE[st.body]}</span> {\n`
+    + `  <span class="com">// body = "${st.body}" สืบทอดมาจาก ${BASE[st.body]}</span>\n`
+    + lines.join('\n') + `\n}\n\n<span class="kw">const</span> pet = <span class="kw">new</span> <span class="cls">${cls}</span>${call}`;
+}
+
+// combo counter
+const partCount = ['body','eyes','horns','ears','wings','tail','acc','markings'].reduce((a,g) => a + OPTS[g].filter(o => o[0] !== 'none').length, 0);
+const combos = Object.keys(OPTS).reduce((a,g) => a * OPTS[g].length, 2);
+document.getElementById('count').textContent = combos.toLocaleString('en-US');
+document.getElementById('parts').textContent = partCount;
+
+const drawersEl = document.getElementById('drawers');
+DRAWERS.forEach(([title, groups]) => {
+  const d = document.createElement('div'); d.className = 'drawer';
+  d.innerHTML = `<h3>${title}</h3>` + groups.map(g => `<fieldset><legend>${LABEL[g]} <code>${g}</code></legend><div class="chips">` +
+    OPTS[g].map(([v,t]) => `<input type="radio" name="${g}" id="opt-${g}-${v}" value="${v}"><label for="opt-${g}-${v}">${t}</label>`).join('') + '</div></fieldset>').join('');
+  drawersEl.appendChild(d);
+});
+drawersEl.addEventListener('change', e => { if(e.target.name){ state[e.target.name] = e.target.value; sync(); } });
+const cheeksEl = document.getElementById('opt-cheeks'), gridEl = document.getElementById('opt-grid'), rulesEl = document.getElementById('opt-rules');
+cheeksEl.addEventListener('change', () => { state.cheeks = cheeksEl.checked; sync(); });
+rulesEl.addEventListener('change', sync);
+
+let mainEff = state;
+function sync(){
+  Object.keys(OPTS).forEach(g => { const el = document.getElementById(`opt-${g}-${state[g]}`); if(el) el.checked = true; });
+  cheeksEl.checked = state.cheeks;
+  const r = resolve(state, rulesEl.checked); mainEff = r.e;
+  const ruleEl = document.getElementById('rule');
+  ruleEl.hidden = !r.dropped.length;
+  ruleEl.textContent = r.dropped.length ? 'กฎความน่ารักตัดออก: ' + r.dropped.join(', ') : '';
+  document.getElementById('nick').textContent = nickOf(state);
+  document.getElementById('code').innerHTML = codeOf(mainEff);
+  buildSheet();
+}
+
+// contact sheet: options of one group × every body
+const SHEET_GROUPS = ['eyes','horns','ears','wings','tail','acc','markings','element','tone','size'];
+let sheetGroup = 'horns', sheet = [];
+const pickEl = document.getElementById('sheet-pick');
+pickEl.innerHTML = SHEET_GROUPS.map(g => `<input type="radio" name="sheet" id="sheet-${g}" value="${g}"${g===sheetGroup?' checked':''}><label for="sheet-${g}">${LABEL[g]}</label>`).join('');
+pickEl.addEventListener('change', e => { sheetGroup = e.target.value; buildSheet(); });
+function buildSheet(){
+  const el = document.getElementById('sheet'); el.innerHTML = ''; sheet = [];
+  el.insertAdjacentHTML('beforeend', '<div></div>' + OPTS.body.map(([,t]) => `<div class="hd">${t}</div>`).join(''));
+  OPTS[sheetGroup].forEach(([v,t], ri) => {
+    el.insertAdjacentHTML('beforeend', `<div class="rh">${t}</div>`);
+    OPTS.body.forEach(([bv], ci) => {
+      const st = resolve({...state, [sheetGroup]: v, body: bv}, rulesEl.checked).e;
+      const cell = document.createElement('div'); cell.className = 'cell';
+      cell.innerHTML = '<canvas width="64" height="64"></canvas>';
+      el.appendChild(cell);
+      sheet.push({st, ctx: cell.firstChild.getContext('2d'), phase: ri*311 + ci*97});
+    });
+  });
+}
+
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const pickOr = (g, pNone) => Math.random() < pNone ? 'none' : pick(OPTS[g].slice(1))[0];
+function randomState(){
+  return {body:pick(OPTS.body)[0], size:pick(OPTS.size)[0], element:pick(OPTS.element)[0], element2:pickOr('element2',.6),
+    tone: Math.random() < .06 ? 'shiny' : pick(OPTS.tone.slice(0,3))[0], markings:pickOr('markings',.5), eyes:pick(OPTS.eyes)[0],
+    horns:pickOr('horns',.45), ears:pickOr('ears',.45), wings:pickOr('wings',.5), tail:pickOr('tail',.5), acc:pickOr('acc',.6), cheeks:Math.random() < .8};
+}
+document.getElementById('btn-rand').addEventListener('click', () => { state = randomState(); sync(); });
+document.getElementById('btn-reset').addEventListener('click', () => { state = {...DEFAULT}; sync(); });
+
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tankEl = document.getElementById('tank');
+let tank = [];
+function describe(st){
+  const f = fusion(st);
+  const el = f ? f[1] : (st.element2 !== 'none' && st.element !== 'none' && st.element2 !== st.element ? '' : lbl('element', st.element));
+  const bits = [el, lbl('body', st.body)];
+  if(st.tone === 'shiny') bits.push('หายาก');
+  if(st.markings !== 'none') bits.push('ลาย' + lbl('markings', st.markings));
+  ['horns','ears','wings','tail'].forEach(k => { if(st[k] !== 'none') bits.push(LABEL[k] + lbl(k, st[k])); });
+  if(st.acc !== 'none') bits.push(lbl('acc', st.acc));
+  return bits.filter(Boolean).join(' · ');
+}
+function fillTank(){
+  tank = Array.from({length:12}, (_, i) => ({raw: randomState(), phase: Math.floor(Math.random()*4000) + i*137}));
+  tankEl.innerHTML = '';
+  tank.forEach(item => {
+    item.st = resolve(item.raw, rulesEl.checked).e;
+    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'spec';
+    btn.innerHTML = `<div class="box"><canvas width="96" height="96"></canvas></div><b>${esc(nickOf(item.raw))}</b><span>${describe(item.st)}</span>`;
+    item.ctx = btn.querySelector('canvas').getContext('2d');
+    btn.addEventListener('click', () => { state = {...item.raw}; sync(); document.querySelector('.main').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'}); });
+    tankEl.appendChild(btn);
+  });
+}
+document.getElementById('btn-tank').addEventListener('click', fillTank);
+rulesEl.addEventListener('change', () => tank.forEach(item => { item.st = resolve(item.raw, rulesEl.checked).e; }));
+
+const mainCtx = document.getElementById('main').getContext('2d');
+const xs = ['x1','x2','x3'].map(id => document.getElementById(id).getContext('2d'));
+let last = -1;
+function frame(t){
+  if(last < 0 || t - last >= 80){
+    last = t;
+    const css = getComputedStyle(document.documentElement);
+    const opt = {ground: css.getPropertyValue('--ground').trim() || 'rgba(0,0,0,.15)', still: reduce, grid:false, gridColor: css.getPropertyValue('--stage-dot').trim()};
+    render(mainCtx, mainEff, 10, t, 0, {...opt, grid: gridEl.checked});
+    xs.forEach((c,i) => render(c, mainEff, i+1, t, 0, opt));
+    sheet.forEach(item => render(item.ctx, item.st, 2, t, item.phase, opt));
+    tank.forEach(item => render(item.ctx, item.st, 3, t, item.phase, opt));
+  }
+  requestAnimationFrame(frame);
+}
+sync(); fillTank(); requestAnimationFrame(frame);
+})();
+</script>

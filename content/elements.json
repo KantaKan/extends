@@ -1,0 +1,8 @@
+{
+  "none": { "speed": 1, "hunger": 1, "moveEnergy": 1 },
+  "fire": { "speed": 1.4, "hunger": 1.6, "moveEnergy": 1 },
+  "water": { "speed": 0.75, "hunger": 0.6, "moveEnergy": 1 },
+  "earth": { "speed": 0.8, "hunger": 1, "moveEnergy": 0.5 },
+  "air": { "speed": 1, "hunger": 1, "moveEnergy": 1 },
+  "void": { "speed": 1, "hunger": 1, "moveEnergy": 1 }
+}

@@ -1,0 +1,114 @@
+{
+  "api": {
+    "script": [
+      {
+        "code": "slime.gather(nearest(\"essence\"))",
+        "key": "nb.api.gather"
+      },
+      {
+        "code": "slime.gather(nearest(\"golden\"))",
+        "key": "nb.api.golden"
+      },
+      {
+        "code": "slime.gatherNearest()",
+        "key": "nb.api.gatherNearest"
+      },
+      {
+        "code": "slime.move(3, 2)",
+        "key": "nb.api.move"
+      },
+      {
+        "code": "slime.eat()",
+        "key": "nb.api.eat"
+      },
+      {
+        "code": "slime.name = \"Mochi\"",
+        "key": "nb.api.name"
+      },
+      {
+        "code": "slime.hunger",
+        "key": "nb.api.hunger"
+      },
+      {
+        "code": "slime.energy",
+        "key": "nb.api.energy"
+      },
+      {
+        "code": "slime.x / slime.y",
+        "key": "nb.api.xy"
+      },
+      {
+        "code": "nearest(\"essence\")",
+        "key": "nb.api.nearest"
+      },
+      {
+        "code": "console.log(slime.hunger)",
+        "key": "nb.api.log"
+      }
+    ],
+    "class": [
+      {
+        "code": "class Slime extends Creature { … }",
+        "key": "nb.api.class"
+      },
+      {
+        "code": "update() { … }",
+        "key": "nb.api.update"
+      },
+      {
+        "code": "new Slime()",
+        "key": "nb.api.new"
+      },
+      {
+        "code": "this.gather(nearest(\"essence\"))",
+        "key": "nb.api.thisGather"
+      },
+      {
+        "code": "this.gather(nearest(\"golden\"))",
+        "key": "nb.api.golden"
+      },
+      {
+        "code": "this.eat()",
+        "key": "nb.api.thisEat"
+      },
+      {
+        "code": "this.move(3, 2)",
+        "key": "nb.api.thisMove"
+      },
+      {
+        "code": "this.hunger / this.energy",
+        "key": "nb.api.thisStats"
+      },
+      {
+        "code": "body = \"bean\"",
+        "key": "nb.api.parts"
+      }
+    ]
+  },
+  "lessons": [
+    {
+      "id": "if",
+      "unlock": "eat-when-hungry"
+    },
+    {
+      "id": "loop",
+      "unlock": "clear-field"
+    },
+    {
+      "id": "function",
+      "unlock": "gather-function"
+    },
+    {
+      "id": "class",
+      "unlock": "herd-10"
+    },
+    {
+      "id": "this",
+      "unlock": "each-own-hunger"
+    },
+    {
+      "id": "extends",
+      "unlock": "new-element"
+    }
+  ]
+}

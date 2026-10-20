@@ -1,0 +1,10 @@
+[
+  { "id": "gather-8", "kind": "gather", "count": 8, "seconds": 45, "reward": 2, "minQuest": 2 },
+  { "id": "feed-2", "kind": "feed", "count": 2, "seconds": 60, "reward": 2, "minQuest": 3 },
+  { "id": "gather-15", "kind": "gather", "count": 15, "seconds": 60, "reward": 3, "minQuest": 3 },
+  { "id": "herd-5", "kind": "herd", "count": 5, "seconds": 60, "reward": 4, "minQuest": 5 },
+  { "id": "feed-6", "kind": "feed", "count": 6, "seconds": 45, "reward": 5, "minQuest": 6 },
+  { "id": "fire-2", "kind": "element", "element": "fire", "count": 2, "seconds": 90, "reward": 6, "minQuest": 7 },
+  { "id": "water-2", "kind": "element", "element": "water", "count": 2, "seconds": 90, "reward": 6, "minQuest": 7 },
+  { "id": "gather-25", "kind": "gather", "count": 25, "seconds": 60, "reward": 6, "minQuest": 6 }
+]
