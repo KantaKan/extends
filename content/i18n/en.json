@@ -168,7 +168,7 @@
   "up.well.name": "Essence well",
   "up.generator.name": "Generator",
   "up.hatchery.name": "Hatchery",
-  "up.well.effect": "Essence every {sec} s, up to {max} · golden Essence {gold}%",
+  "up.well.effect": "Essence every {sec} s, up to {max} · golden Essence {gold}% · a bigger herd makes it faster (up to 10)",
   "up.generator.effect": "{mana} Mana per tick · fast-forward up to {speed}x",
   "up.hatchery.effect": "Hatching costs {cost} Essence per creature",
   "up.level": "level {n}/{max}",
@@ -179,7 +179,7 @@
   "up.close": "Close",
   "ref.upgrades": "The machines have power! Click the Essence well, the generator or the hatchery to upgrade them with Essence.",
   "ref.upgraded": "{name} upgraded!",
-  "tip.speedLocked": "🔒 Upgrade the generator to fast-forward faster",
+  "tip.speedLocked": "🔒 Upgrade the generator to level 3 for 16x",
   "nb.api.golden": "Gather the nearest golden Essence: worth 5, but it vanishes in 15 s (null if none). Appears once the well is upgraded.",
   "ref.golden": "✨ Golden Essence! Worth 5, but it vanishes in 15 seconds. Find it with nearest(\"golden\").",
   "nb.tab.codex": "Codex",
@@ -193,7 +193,7 @@
   "quest.firstClass.nudge": "A class is a creature mould; update() is what it thinks every tick, so you stop giving orders line by line. new Slime() makes one from the mould.",
   "quest.upgradeMachine.title": "Upgrade a machine",
   "quest.upgradeMachine.hint": "Click the Essence well, the generator or the hatchery in the lab, then Upgrade",
-  "quest.upgradeMachine.nudge": "The herd's Essence buys machine upgrades. Generator level 2 also unlocks 4x fast-forward.",
+  "quest.upgradeMachine.nudge": "The herd's Essence buys machine upgrades. Generator level 3 also unlocks 16x fast-forward.",
   "quest.researchPart.title": "Research a new part with Crystal",
   "quest.researchPart.hint": "Notebook → Parts: pick one with 🔒 and press Research",
   "quest.researchPart.nudge": "Crystal comes from the orders board and unlocks new looks, like body = \"quad\".",
@@ -211,5 +211,6 @@
   "ref.syn.1128": "Line {line}: something extra here, maybe one } too many. Count your braces: opens and closes should match.",
   "ref.syn.1160": "Line {line}: a ` (backtick) is never closed.",
   "ref.syn.1161": "Line {line}: a lone / here. For a note, use two: //",
-  "ref.syn.1434": "Line {line}: an unknown word. A typo, or a missing . or ( ) between words?"
+  "ref.syn.1434": "Line {line}: an unknown word. A typo, or a missing . or ( ) between words?",
+  "tip.speedDark": "🔒 Light up the lab first (the gather-5 quest) to unlock 4x"
 }

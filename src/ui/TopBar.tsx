@@ -14,10 +14,12 @@ type Props = {
   speed: Speed
   /** Fastest speed the generator allows (src/sim/upgrades.ts); faster buttons show a lock. */
   maxSpeed: number
+  /** Why the faster buttons are locked (no power yet / needs a generator upgrade). */
+  lockTip: string
   onSpeed: (s: Speed) => void
 }
 
-export function TopBar({ essence, crystal, mana, manaMax, manaOut, speed, maxSpeed, onSpeed }: Props) {
+export function TopBar({ essence, crystal, mana, manaMax, manaOut, speed, maxSpeed, lockTip, onSpeed }: Props) {
   return (
     <header className="topbar">
       <span className="logo">Extends</span>
@@ -34,8 +36,8 @@ export function TopBar({ essence, crystal, mana, manaMax, manaOut, speed, maxSpe
       </span>
       <div className="speeds" role="group">
         {SPEEDS.map((s) => s > maxSpeed ? (
-          <span key={s} title={t('tip.speedLocked')}>
-            <button type="button" disabled aria-label={t('tip.speedLocked')}>🔒{s}x</button>
+          <span key={s} title={lockTip}>
+            <button type="button" disabled aria-label={lockTip}>🔒{s}x</button>
           </span>
         ) : (
           <button key={s} type="button" aria-pressed={s === speed} onClick={() => onSpeed(s)}>

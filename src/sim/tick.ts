@@ -1,6 +1,6 @@
 import { parseCommand } from './commands'
 import { EAT_ENERGY, EAT_RELIEF, NO_TRAITS, REACH, STAT_MAX, stepTowards, updateNeeds } from './creature'
-import { machineStats } from './upgrades'
+import { machineStats, respawnInterval } from './upgrades'
 import { GOLDEN_VALUE, random, spawnCreature, spawnEssence, type World } from './world'
 
 export type RejectReason = 'bad-command' | 'no-creature' | 'busy' | 'no-mana' | 'tired' | 'no-target' | 'no-food' | 'not-hungry'
@@ -73,9 +73,9 @@ export function step(w: World, rawCommands: readonly unknown[]): TickEvent[] {
   separate(w)
   hatch(w, events)
   w.tick++
-  const { respawnTicks, essenceMax } = machineStats(w.levels)
+  const { essenceMax } = machineStats(w.levels)
   w.essence = w.essence.filter((e) => e.until === undefined || e.until > w.tick) // golden pieces fade
-  if (w.tick % respawnTicks === 0 && w.essence.length < essenceMax) {
+  if (w.tick % respawnInterval(w.levels, w.creatures.length) === 0 && w.essence.length < essenceMax) {
     const e = spawnEssence(w)
     if (e?.golden) events.push({ type: 'golden', essence: e.id })
   }

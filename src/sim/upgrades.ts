@@ -10,6 +10,16 @@ export type Levels = Record<Machine, number>
 export const START_LEVELS: Levels = { well: 0, generator: 0, hatchery: 0 }
 export const maxLevel = (m: Machine) => UPGRADES[m].length - 1
 
+/**
+ * Ticks between new Essence: the well's level, sped up by the herd working it (more creatures, more
+ * Essence, up to `herd.cap`). Without this one slime harvests everything and a herd only costs food.
+ */
+export function respawnInterval(levels: Levels, creatures: number): number {
+  const { bonusPerCreature, cap } = UPGRADES.herd
+  const helpers = Math.max(0, Math.min(creatures, cap) - 1)
+  return Math.max(1, Math.round(machineStats(levels).respawnTicks / (1 + bonusPerCreature * helpers)))
+}
+
 /** What the lab's machines do at these levels. */
 export function machineStats(levels: Levels) {
   const row = <T>(rows: T[], i: number) => rows[Math.min(i, rows.length - 1)]!

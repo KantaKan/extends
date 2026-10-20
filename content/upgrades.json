@@ -24,7 +24,7 @@
   "generator": [
     {
       "mana": 20,
-      "maxSpeed": 1
+      "maxSpeed": 4
     },
     {
       "cost": 70,
@@ -49,5 +49,9 @@
       "cost": 100,
       "hatchCost": 1
     }
-  ]
+  ],
+  "herd": {
+    "bonusPerCreature": 0.1,
+    "cap": 10
+  }
 }

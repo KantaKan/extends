@@ -372,7 +372,7 @@ export function App({ saved }: { saved: LabSave | null }) {
   return (
     <div className={`game${dnaOpen ? ' dna-open' : ''}`}>
       <LabView world={world} species={species} status={status} lit={lit} onPick={onPickCreature} onTerminal={() => setDrawer(true)} onMachine={(m) => { setSelected(null); setMachine(m) }} beckon={started && !inTutorial && !dnaOpen} cover={{ bottom: dnaOpen ? dnaHeight() : 0, focusId: selected ?? starterId ?? null }} labRef={labRef} />
-      <TopBar essence={hud.essence} crystal={lit ? world.resources.crystal : null} mana={hud.mana} manaMax={hud.manaMax} manaOut={manaOut} speed={speed} maxSpeed={machineStats(world.levels).maxSpeed} onSpeed={setSpeed} />
+      <TopBar essence={hud.essence} crystal={lit ? world.resources.crystal : null} mana={hud.mana} manaMax={hud.manaMax} manaOut={manaOut} speed={speed} maxSpeed={lit ? machineStats(world.levels).maxSpeed : 1} lockTip={t(lit ? 'tip.speedLocked' : 'tip.speedDark')} onSpeed={setSpeed} />
       <Banner msg={banner} />
       <div className="side">
         {started && !inTutorial && <QuestCard quest={quests[questIx] ?? null} progress={questProgress} vars={{ ...newElementHint(save.starter?.element), mine: save.starter?.element ?? 'none' }} onOpenDna={() => setDrawer(true)} />}

@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { fromSave, toSave } from './save'
 import { emptyOrders } from './orders'
 import { step } from './tick'
-import { machineStats, maxLevel, upgrade, upgradeCost } from './upgrades'
-import { createWorld, MANA_MAX } from './world'
+import { machineStats, maxLevel, respawnInterval, START_LEVELS, upgrade, upgradeCost } from './upgrades'
+import { createWorld, MANA_MAX, spawnCreature } from './world'
 
 describe('machine upgrades', () => {
   it('Essence buys the next level; each level does more', () => {
@@ -58,5 +58,19 @@ describe('machine upgrades', () => {
     const old = JSON.parse(JSON.stringify(s)) as { world: { levels?: unknown } }
     delete old.world.levels
     expect(fromSave(old)!.world.levels).toEqual({ well: 0, generator: 0, hatchery: 0 })
+  })
+
+  it('a herd works the well: more creatures, more Essence (up to the cap)', () => {
+    const grown = (n: number) => {
+      const w = createWorld(3)
+      for (let i = 0; i < n; i++) spawnCreature(w, `s${i}`, 'Slime', 0.5, 0.5)
+      w.essence = []
+      for (let i = 0; i < 300; i++) { step(w, []); w.essence = w.essence.slice(0, 0) }
+      return w.nextId
+    }
+    expect(respawnInterval(START_LEVELS, 1)).toBe(machineStats(START_LEVELS).respawnTicks)
+    expect(respawnInterval(START_LEVELS, 10)).toBeLessThan(respawnInterval(START_LEVELS, 1))
+    expect(respawnInterval(START_LEVELS, 40)).toBe(respawnInterval(START_LEVELS, 10))
+    expect(grown(10)).toBeGreaterThan(grown(1) + 9)
   })
 })
